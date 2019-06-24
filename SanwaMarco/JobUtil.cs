@@ -22,9 +22,16 @@ namespace SanwaMarco
         string[] cmds;
         string condition;
     }
-    public class Util
+    public class JobUtil
     {
-        public static Dictionary<string, string> localVarMap = new Dictionary<string, string>();
+        public Dictionary<string, string> localVarMap = new Dictionary<string, string>();
+        public string marcoName;
+        
+        public JobUtil(string marcoName, Dictionary<string, string> localVarMap)
+        {
+            this.localVarMap = localVarMap;
+            this.marcoName = marcoName;
+        }
 
         internal void Send(DeviceController device, string msg)
         {
@@ -55,6 +62,7 @@ namespace SanwaMarco
         public const int LOG_LEVEL_INFO = 2;
         public const int LOG_LEVEL_DEBUG = 3;
         public int logMode = LOG_LEVEL_INFO;//LOG_LEVEL_DEBUG
+        public string result;
         StringBuilder log = new StringBuilder();
         string lastLine = "";
         //MessageReport msgReport = new MessageReport();
@@ -64,13 +72,12 @@ namespace SanwaMarco
             
         //}
 
-        public string RunMarco(String marcoName, Dictionary<string, string> args)
+        public void RunMarco()
         {
             //localVarMap.Clear();//清除區域變數
-            localVarMap = args;
             log.Clear();//清除 log
             isFinish = false;
-            string filePath =  marcoName ;
+            string filePath = "marco\\" + marcoName + ".vb";
 
             //這樣才能讀入中文字元 System.Text.Encoding.GetEncoding(950)
             try
@@ -103,24 +110,25 @@ namespace SanwaMarco
                 }
                 sr.Close();
                 parseMarco();
-                return log.ToString();
+                result = log.ToString();
             }
             catch (DirectoryNotFoundException de)
             {
                 error(filePath + "路徑不存在.\n" + de.StackTrace + " " + de.Message);
-                return filePath + "路徑不存在.\n" + de.StackTrace + " " + de.Message;
+                result = filePath + "路徑不存在.\n" + de.StackTrace + " " + de.Message;
             }
             catch (FileNotFoundException fe )
             {
                 error(filePath + "檔案不存在.\n" + fe.StackTrace + " " + fe.Message);
-                return filePath + "檔案不存在.\n" + fe.StackTrace + " " + fe.Message;
+                result = filePath + "檔案不存在.\n" + fe.StackTrace + " " + fe.Message;
             }
             catch (Exception e)
             {
 
                 error(e.StackTrace + " " + e.Message);
-                return e.StackTrace + " " + e.Message;
+                result = e.StackTrace + " " + e.Message;
             }
+            isFinish = true;
         }
 
         private void parseMarco()

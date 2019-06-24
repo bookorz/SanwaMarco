@@ -70,6 +70,7 @@
     <Compile Include="Controller\DeviceController.cs" />
     <Compile Include="Controller\DeviceNetCtrl.cs" />
     <Compile Include="DeviceConfiguration.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="GUICmdCtrl.cs" />
     <Compile Include="Marco.cs" />
     <Compile Include="MessageReport.cs" />
@@ -79,13 +80,16 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Util.cs" />
+    <Compile Include="JobUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Lib\I7565DNM_DotNET.dll" />
     <Content Include="Lib\log4net.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
     <Content Include="Lib\NPOI.dll" />
+    <Content Include="marco\MARCO_TEST.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="marco\ROBOT_CARRY.vb" />
     <Content Include="marco\ROBOT_GET.vb" />
     <Content Include="marco\ROBOT_PRESENCE.vb" />

@@ -25,6 +25,7 @@ namespace SanwaMarco
         // Received data string.  
         public StringBuilder sb = new StringBuilder();
 
+
         //public void ClearBuffer()
         //{
         //    buffer = new byte[BufferSize];
@@ -38,10 +39,15 @@ namespace SanwaMarco
         ICommMessage _EventReport;
         // Thread signal.  
         public ManualResetEvent allDone = new ManualResetEvent(false);
+        public Socket replayer;
 
         public GUICmdCtrl()
         {
             _EventReport = this;
+            Marco._EventReport = this;
+        }
+        public void Start()
+        {
             ThreadPool.QueueUserWorkItem(new WaitCallback(StartListening));
         }
 
@@ -204,21 +210,28 @@ namespace SanwaMarco
         {
             try
             {
+                replayer = handler;
                 Dictionary<string, string> argMap = new Dictionary<string, string>();
+                argMap.Add("msg", msg);
                 #region 訊息解析
                 string returnMsg = "";
                 string orgMsg = msg.Substring(6, msg.Length - 7);//去除前六碼, 與最後的;
+                argMap.Add("orgMsg", orgMsg);
+
                 //分解訊息
-                string[] rcvMsgAry = msg.Split('/');
+                string[] rcvMsgAry = msg.Substring(0, msg.Length - 1).Split('/');//去最後一碼;
                 //取得命令
                 string cmd = rcvMsgAry[0];
+                argMap.Add("cmd", cmd);
                 //取得引數
                 string[] rcvArgs = new string[rcvMsgAry.Length - 1];//0 是命令，不是參數，所以長度少1
                 Array.Copy(rcvMsgAry, 1, rcvArgs, 0, rcvArgs.Length);
                 //分解命令: 取得 address
                 string address = cmd.Substring(1, 1);
+                argMap.Add("address", address);
                 //分解命令: 取得 命令類別
                 string cmd_type = cmd.Substring(2, 3);
+                argMap.Add("cmd_type", cmd_type);
                 //分解命令: 取得 功能名稱
                 int lastIdx = cmd.LastIndexOf(":") > 5 ? cmd.LastIndexOf(":") : cmd.Length;
                 string func_name = cmd.Substring(6, lastIdx - 6).Replace(";","");// 前六碼為固定前修飾詞, 例如 $1CMD: $2MCR:
@@ -306,35 +319,20 @@ namespace SanwaMarco
                         Marco.RunMarco(func_name, argMap);
                         break;
                     #endregion
+                    case "MARCO_TEST":
+                        argMap.Add("@id", rcvArgs[0]);//測試用參數1
+                        argMap.Add("@name", rcvArgs[1]);//測試用參數2
+                        Marco.RunMarco(func_name, argMap);
+                        break;
                     default:
                         break;
                 }
                 #endregion
 
-                #region 回傳訊息
-                if (doResult)
-                {
-                    //INF
-                    //returnMsg = msg.Replace("MCR", "INF").Replace("GET", "INF").Replace("SET", "INF").Replace(";", "");
-                    returnMsg = "$" + address + "INF:" + orgMsg;
-                    param = new string[] { "1", "2", "3", "ON" };
-                    param = new string[] { "ON" };
-                    foreach (string arg in param)
-                    {
-                        returnMsg = returnMsg + "/" + arg;
-                    }
-                }
-                else
-                {
-                    //ABS
-                    returnMsg = msg.Replace("MCR", "ABS").Replace("GET", "ABS").Replace(";", "") + "|ERROR/Factor2/Place";
-                }
-                Send(handler, returnMsg + ";\r");//send INF or ABS
-                #endregion
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.StackTrace);
+                logger.Error(e.Message + " " + e.StackTrace);
             }
 
             
@@ -379,5 +377,26 @@ namespace SanwaMarco
         {
             Console.WriteLine("On_Connection_Error");
         }
+
+        public void On_Marco_Finish(object obj)
+        {
+            string returnMsg = "";
+            JobUtil job = (JobUtil) obj;
+            #region 回傳訊息
+            if (job.result.Equals(""))
+            {
+                //INF
+                //returnMsg = msg.Replace("MCR", "INF").Replace("GET", "INF").Replace("SET", "INF").Replace(";", "");
+                returnMsg = "$" + job.localVarMap["address"] + "INF:" + job.localVarMap["orgMsg"];
+            }
+            else
+            {
+                //ABS
+                returnMsg = job.localVarMap["msg"].Replace("MCR", "ABS").Replace("GET", "ABS").Replace(";", "") + "|ERROR/" + job.result  + "/Place";
+            }
+            Send(replayer, returnMsg + ";\r");//send INF or ABS
+            #endregion
+        }
+
     }
 }

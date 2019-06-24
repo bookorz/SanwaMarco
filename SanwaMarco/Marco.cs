@@ -7,6 +7,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SanwaMarco
@@ -14,12 +15,26 @@ namespace SanwaMarco
     public static class Marco
     {
         public static Dictionary<string, string> pubVarMap = new Dictionary<string, string>();
-        public static Util util = new Util();
         public static Dictionary<string, Object> deviceMap = new Dictionary<string, Object>();
+        public static GUICmdCtrl _EventReport;
 
-        public static string RunMarco(String marcoName, Dictionary<string, string> args)
+        public static void RunMarco(String marcoName, Dictionary<string, string> args)
         {
-            return util.RunMarco("marco\\" + marcoName + ".vb", args);
+            ThreadPool.QueueUserWorkItem(new WaitCallback(RunMarco), new JobUtil(marcoName, args));
+        }
+        private static void RunMarco(object obj)
+        {
+            JobUtil util = (JobUtil)obj;
+            util.RunMarco();
+            while (!util.isFinish)
+            {
+                SpinWait.SpinUntil(() => false, 1000);
+            }
+            Console.WriteLine("-----------------------------------------");
+            Console.WriteLine(util.result);
+            Console.WriteLine("-----------------------------------------");
+            _EventReport.On_Marco_Finish(util);
+            //GUICmdCtrl.
         }
         public static void ConnDevice()
         {
@@ -81,29 +96,29 @@ namespace SanwaMarco
             //xmlDoc.Save(configFile);
             //ConfigurationManager.RefreshSection("deviceSettingGroup/deviceConfig");
         }
-        private static void SendMessage(string device_name, string msg)
-        {
-            if (!deviceMap.ContainsKey(device_name))
-            {
-                Console.WriteLine("Device: " + device_name  + " 不存在");
-            }
-            else
-            {
-                DeviceController device = (DeviceController)deviceMap[device_name];
-                util.Send(device, msg);
-            }
-        }
-        public static void Init(string device_name)
-        {
-            if (!deviceMap.ContainsKey(device_name))
-            {
-                Console.WriteLine("Device: " + device_name + " 不存在");
-            }
-            else
-            {
-                DeviceController device = (DeviceController)deviceMap[device_name];
-                device.processState = DeviceController.PROCESS_STATE_IDLE;
-            }
-        }
+        //private static void SendMessage(string device_name, string msg)
+        //{
+        //    if (!deviceMap.ContainsKey(device_name))
+        //    {
+        //        Console.WriteLine("Device: " + device_name  + " 不存在");
+        //    }
+        //    else
+        //    {
+        //        DeviceController device = (DeviceController)deviceMap[device_name];
+        //        util.Send(device, msg);
+        //    }
+        //}
+        //public static void Init(string device_name)
+        //{
+        //    if (!deviceMap.ContainsKey(device_name))
+        //    {
+        //        Console.WriteLine("Device: " + device_name + " 不存在");
+        //    }
+        //    else
+        //    {
+        //        DeviceController device = (DeviceController)deviceMap[device_name];
+        //        device.processState = DeviceController.PROCESS_STATE_IDLE;
+        //    }
+        //}
     }
 }
