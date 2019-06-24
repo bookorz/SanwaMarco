@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SanwaMarco.Comm
 {
-    interface IConnectionReport
+    public interface IConnectionReport
     {
         void On_Connection_Message(object Msg);
         void On_Connection_Connecting(string Msg);

@@ -17,9 +17,60 @@ namespace SanwaMarco.Controller
         }
         public Byte ConType()
         {
-            return Byte.Parse(I7565DNM_DotNET.I7565DNM.ConType.ConType_Poll.ToString());
+            return (Byte)I7565DNM_DotNET.I7565DNM.ConType.ConType_Poll;
         }
-        public ushort DeviceInputLen = 2;
+
+        public DeviceNetCtrl(string moduleName, string desMACID, string[] ioNames)
+        {
+            ModuleName = moduleName;
+            this.desMACID = desMACID;
+            switch (moduleName)
+            {
+                case "DRT2-ID08":
+                    DeviceInputLen = 1;
+                    DeviceOutputLen = 0;
+                    break;
+                case "DRT2-ID16TA":
+                    DeviceInputLen = 2;
+                    DeviceOutputLen = 0;
+                    break;
+                case "DRT2-OD16TA":
+                    DeviceInputLen = 0;
+                    DeviceOutputLen = 2;
+                    break;
+                case "DRT2-MD16":
+                    DeviceInputLen = 1;
+                    DeviceOutputLen = 1;
+                    break;
+                case "EX180-SDN":
+                case "EX180-SDN1":
+                    DeviceInputLen = 0;
+                    DeviceOutputLen = 2;
+                    break;
+                default:
+                    DeviceInputLen = 0;
+                    DeviceOutputLen = 0;
+                    break;
+            }
+            iO_01_NAME = ioNames[0];
+            iO_02_NAME = ioNames[1];
+            iO_03_NAME = ioNames[2];
+            iO_04_NAME = ioNames[3];
+            iO_05_NAME = ioNames[4];
+            iO_06_NAME = ioNames[5];
+            iO_07_NAME = ioNames[6];
+            iO_08_NAME = ioNames[7];
+            iO_09_NAME = ioNames[8];
+            iO_10_NAME = ioNames[9];
+            iO_11_NAME = ioNames[10];
+            iO_12_NAME = ioNames[11];
+            iO_13_NAME = ioNames[12];
+            iO_14_NAME = ioNames[13];
+            iO_15_NAME = ioNames[14];
+            iO_16_NAME = ioNames[15];
+        }
+
+        public ushort DeviceInputLen = 0;
         public ushort DeviceOutputLen = 0;
         public ushort EPR = 200;//參考範例給的值
 

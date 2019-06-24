@@ -147,6 +147,7 @@ namespace SanwaMarco.Comm
             catch (Exception e)
             {
                 //logger.Error("(ConnectServer " + RmIp + ":" + SPort + ")" + e.Message + "\n" + e.StackTrace);
+                logger.Error("(ConnectServer )" + e.Message + "\n" + e.StackTrace);
                 ConnReport.On_Connection_Error("(ConnectServer )" + e.Message + "\n" + e.StackTrace);
             }
         }

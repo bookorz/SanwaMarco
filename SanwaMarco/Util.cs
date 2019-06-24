@@ -59,68 +59,15 @@ namespace SanwaMarco
         string lastLine = "";
         //MessageReport msgReport = new MessageReport();
 
-        public void Connect()
-        {
-            var configFile = Directory.GetCurrentDirectory() + "\\" + "Device.config";
-            ConfigurationFileMap fileMap = new ConfigurationFileMap(configFile);
-            DeviceConfiguration config = ConfigurationManager.OpenMappedMachineConfiguration(fileMap).GetSection("deviceSettingGroup/deviceConfig") as DeviceConfiguration;
-            Console.WriteLine();
-            Marco.deviceMap.Clear();
-            foreach (DeviceSettingElement foo in config.DeviceSettings)
-            {
-                DeviceController dvcCtrl;
-                Console.WriteLine("--------------------------");
-                Console.WriteLine(foo.Name);
-                Console.WriteLine(foo.Enable);
-                Console.WriteLine(foo.Conn_Type);
-                Console.WriteLine(foo.Conn_Address);
-                Console.WriteLine(foo.Conn_Port);
-                Console.WriteLine(foo.Com_Baud_Rate);
-                Console.WriteLine(foo.Com_Data_Bits);
-                Console.WriteLine(foo.Com_Parity_Bit);
-                Console.WriteLine(foo.Com_Stop_Bit);
-                Console.WriteLine("--------------------------");
+        //public void Connect()
+        //{
+            
+        //}
 
-                if (!foo.Enable.Equals("1"))
-                {
-                    Console.WriteLine("---Device:" + foo.Name + " is disabled !-------------------");
-                    continue;
-                }
-                DeviceConfig dc = new DeviceConfig();
-                dc.DeviceName = foo.Name;
-                dc.ConnectionType = foo.Conn_Type;
-                dc.Vendor = foo.Vendor;
-                if (foo.Conn_Type.Equals("Socket"))
-                {
-                    dc.IPAdress = foo.Conn_Address;
-                    dc.Port = Int32.Parse(foo.Conn_Port);
-                    dvcCtrl = new DeviceController(dc);
-                    dvcCtrl.start();
-                    Marco.deviceMap.Add(foo.Name, dvcCtrl);
-                }
-                else if (foo.Conn_Type.Equals("ComPort"))
-                {
-                    dc.PortName = foo.Conn_Address;
-                    dc.BaudRate = foo.Com_Baud_Rate;
-                    dc.DataBits = foo.Com_Data_Bits;
-                    dc.ParityBit = foo.Com_Parity_Bit;
-                    dc.StopBit = foo.Com_Stop_Bit;
-                    dvcCtrl = new DeviceController(dc);
-                    dvcCtrl.start();
-                    Marco.deviceMap.Add(foo.Name, dvcCtrl);
-                }
-            }
-            ////設定停用
-            //var xmlDoc = new XmlDocument();
-            //xmlDoc.Load(configFile);
-            //xmlDoc.SelectSingleNode("//deviceSettingGroup/deviceConfig/devices/device[@name='Robot02']").Attributes["enable"].Value = "0";
-            //xmlDoc.Save(configFile);
-            //ConfigurationManager.RefreshSection("deviceSettingGroup/deviceConfig");
-        }
-
-        public string RunMarco(String marcoName)
+        public string RunMarco(String marcoName, Dictionary<string, string> args)
         {
-            localVarMap.Clear();//清除區域變數
+            //localVarMap.Clear();//清除區域變數
+            localVarMap = args;
             log.Clear();//清除 log
             isFinish = false;
             string filePath =  marcoName ;
@@ -694,13 +641,13 @@ namespace SanwaMarco
             func = func.Replace("API(", "").Replace(");", "");
             string[] args = func.Split(',');
             string arg1 = args[0].Trim().Replace("\"", "");
-            string arg2 = args[1].Trim().Replace("\"", "");
+            Boolean arg2 = args[1].Trim().Replace("\"", "").Equals("true") ? true : false;
             // 未指令 return code 時, 會使用 API 的預設 return code, 存在 method_result
-            string arg3 = args.Length >= 3? args[2].Trim().Replace("\"", "") : "@" + arg1  + "_result"; 
-            //API(arg1, arg2, arg3);
-            //result.Append("Call [API]:" + " Arg1:" + arg1 + ", Arg2:" + arg2 + ", Arg3:" + arg3 + "\n");//debug
+            string arg3 = args.Length >= 3? args[2].Trim().Replace("\"", "") : "@" + arg1  + "_result";
+            API api = new API(arg1, arg2, arg3);//建構API
+            result = api.Run(); //呼叫API
+            result.Append("Call [API]:" + " Arg1:" + arg1 + ", Arg2:" + arg2 + ", Arg3:" + arg3 + "\n");//debug
             return result.ToString();
-
         }
         private Boolean procDelay(string func)
         {

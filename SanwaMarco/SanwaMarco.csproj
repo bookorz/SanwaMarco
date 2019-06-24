@@ -43,6 +43,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NPOI, Version=1.2.4.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\NPOI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -59,12 +63,14 @@
     <Compile Include="Comm\DeviceConfig.cs" />
     <Compile Include="Comm\DeviceElement.cs" />
     <Compile Include="Comm\DeviceSection.cs" />
+    <Compile Include="Comm\ICommMessage.cs" />
     <Compile Include="Comm\IConnection.cs" />
     <Compile Include="Comm\IConnectionReport.cs" />
     <Compile Include="Comm\TcpCommClient.cs" />
     <Compile Include="Controller\DeviceController.cs" />
     <Compile Include="Controller\DeviceNetCtrl.cs" />
     <Compile Include="DeviceConfiguration.cs" />
+    <Compile Include="GUICmdCtrl.cs" />
     <Compile Include="Marco.cs" />
     <Compile Include="MessageReport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -79,6 +85,28 @@
     <Content Include="Lib\I7565DNM_DotNET.dll" />
     <Content Include="Lib\log4net.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
+    <Content Include="Lib\NPOI.dll" />
+    <Content Include="marco\ROBOT_CARRY.vb" />
+    <Content Include="marco\ROBOT_GET.vb" />
+    <Content Include="marco\ROBOT_PRESENCE.vb" />
+    <Content Include="marco\ROBOT_GETW.vb" />
+    <Content Include="marco\ROBOT_PUT.vb" />
+    <Content Include="marco\ROBOT_PUTW.vb" />
+    <Content Include="marco\ROBOT_HOME.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco\ROBOT_ORG.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco\ROBOT_INIT.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco\ROBOT_RESET.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco\ROBOT_SPEED.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -86,10 +114,14 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
+    <None Include="mini.xls">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

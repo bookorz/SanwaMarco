@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SanwaMarco.Comm
 {
-    class TcpCommClient : IConnection
+    public class TcpCommClient : IConnection
     {
         private static readonly ILog logger = LogManager.GetLogger(typeof(TcpCommClient));
         IConnectionReport ConnReport;
@@ -71,6 +71,7 @@ namespace SanwaMarco.Comm
         {
             ConnReport.On_Connection_Connecting("Connecting");
             //先建立IPAddress物件,IP為欲連線主機之IP
+            
             IPAddress ipa = IPAddress.Parse(Config.IPAdress);
 
             //建立IPEndPoint
@@ -95,7 +96,7 @@ namespace SanwaMarco.Comm
             catch (Exception e)
             {
                 tcpClient.Close();
-                //logger.Error("連線失敗" + e.StackTrace);
+                logger.Error("連線失敗" + e.StackTrace);
                 ConnReport.On_Connection_Error("(ConnectServer )" + e.Message + "\n" + e.StackTrace);                
             }
 
