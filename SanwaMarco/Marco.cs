@@ -96,6 +96,10 @@ namespace SanwaMarco
             //xmlDoc.Save(configFile);
             //ConfigurationManager.RefreshSection("deviceSettingGroup/deviceConfig");
         }
+        public static void Print(string msg)
+        {
+            _EventReport.On_Marco_Print(msg);
+        }
         //private static void SendMessage(string device_name, string msg)
         //{
         //    if (!deviceMap.ContainsKey(device_name))

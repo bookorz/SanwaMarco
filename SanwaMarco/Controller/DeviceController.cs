@@ -24,6 +24,7 @@ namespace SanwaMarco.Controller
         public string Name { get; set; }
         public string Status = "Disconnected";
         public string processState = PROCESS_STATE_INIT;
+        public string errorCode = "";
 
         private bool _IsConnected { get; set; }
         public int TrxNo = 1;
@@ -64,6 +65,7 @@ namespace SanwaMarco.Controller
                 }
                 if (_Config.Vendor.ToUpper().Equals("SANWA"))
                     msg = msg + "\r";
+                processState = DeviceController.PROCESS_STATE_PROCESS;
                 conn.Send(msg);
                 result = true;
             }

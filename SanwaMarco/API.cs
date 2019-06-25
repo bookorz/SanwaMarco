@@ -16,27 +16,23 @@ namespace SanwaMarco
     {
 
         private static readonly ILog logger = LogManager.GetLogger(typeof(API));
-        public Dictionary<string, string> varMap { get => varMap; set => varMap = value; }
+        public Dictionary<string, string> varMap;
         public Dictionary<string, DeviceNetCtrl> deviceNetCtrlMap = new Dictionary<string, DeviceNetCtrl>();
         private string method_name;
         private Boolean failReturn;
         private string errCode;
-
-        public API(Dictionary<string, string> varMap)
-        {
-            this.varMap = varMap;
-        }
 
         public API()
         {
 
         }
 
-        public API(string method_name, Boolean failReturn, string errCode)
+        public API(string method_name, Boolean failReturn, string errCode, Dictionary<string, string> varMap)
         {
             this.method_name = method_name;
             this.failReturn = failReturn;
             this.errCode = errCode;
+            this.varMap = varMap;
         }
 
         #region 泓格 I7565DNM 控制
@@ -298,9 +294,123 @@ namespace SanwaMarco
             device.processState = DeviceController.PROCESS_STATE_IDLE;
         }
 
-        internal StringBuilder Run()
+        public string Run()
         {
-            throw new NotImplementedException();
+            String result = "";
+            switch (method_name){
+                case "ATEL_ROBOT_MOTION_CMD":
+                    result = ATEL_ROBOT_MOTION_CMD();
+                    break;
+                default:
+                    result = method_name + " not support";
+                    break;
+            }
+            return result;
         }
+        #region ATEL Robot 控制
+        private string ATEL_ROBOT_MOTION_CMD()
+        {
+            string result = "";
+            string device = "";
+            string cmd = "";
+            DeviceController deviceCtrl = null;
+            try
+            {
+                if(!getAtlCmd(ref result, ref device, ref cmd, ref deviceCtrl))
+                {
+                    return result;
+                }
+                result = cmd;
+                return result;
+            }
+            catch (Exception e)
+            {
+                return e.StackTrace;
+            }
+        }
+
+        private bool getAtlCmd(ref string result, ref string device, ref string cmd, ref DeviceController deviceCtrl)
+        {
+            try
+            {
+                varMap.TryGetValue("@device", out device);
+                if (device == null)
+                {
+                    result = "device not define";
+                    return false;
+                }
+                varMap.TryGetValue("@cmd", out cmd);
+                if (cmd == null)
+                {
+                    result = "cmd not define";
+                    return false;
+                }
+                Marco.deviceMap.TryGetValue(device, out object obj);
+                if (obj == null)
+                {
+                    result = "Device:" + device + " not exist.";
+                    return false;
+                }
+                deviceCtrl = (DeviceController)obj;
+                return true;
+            }
+            catch (Exception e)
+            {
+                result = e.StackTrace;
+                return false;
+            }
+        }
+        private string ATEL_ROBOT_GET_CMD()
+        {
+            string result = "ATEL_ROBOT_GET_CMD ERROR";
+            string device = "";
+            string cmd = "";
+            DeviceController deviceCtrl = null;
+            try
+            {
+                if (!getAtlCmd(ref result, ref device, ref cmd, ref deviceCtrl))
+                {
+                    return result;
+                }
+                SpinWait.SpinUntil(() => deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE, 1000);
+                if (deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE)
+                {
+                    deviceCtrl.sendCommand(cmd);
+                    //等待60秒
+                    SpinWait.SpinUntil(() => deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE, 60000);
+                    result = deviceCtrl.errorCode;
+                }
+                else
+                {
+                    result = device + " is busy.";
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                return e.StackTrace;
+            }
+        }
+        private string ATEL_ROBOT_SET_CMD()
+        {
+            string result = "";
+            string device = "";
+            string cmd = "";
+            DeviceController deviceCtrl = null;
+            try
+            {
+                if (!getAtlCmd(ref result, ref device, ref cmd, ref deviceCtrl))
+                {
+                    return result;
+                }
+                result = cmd;
+                return result;
+            }
+            catch (Exception e)
+            {
+                return e.StackTrace;
+            }
+        }
+        #endregion
     }
 }

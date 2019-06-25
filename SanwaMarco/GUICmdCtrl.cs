@@ -262,7 +262,8 @@ namespace SanwaMarco
                         break;
                     case "CAN":
                     default:
-                        returnMsg = "$" + address + "CAN:" + orgMsg + "|" + factor + "/Place";
+                        //returnMsg = "$" + address + "CAN:" + orgMsg + "|" + factor + "/Place";
+                        returnMsg = "$" + address + "CAN:" + orgMsg + "|" + factor ;
                         Send(handler, returnMsg + ";\r");
                         return;
                 }
@@ -392,10 +393,15 @@ namespace SanwaMarco
             else
             {
                 //ABS
-                returnMsg = job.localVarMap["msg"].Replace("MCR", "ABS").Replace("GET", "ABS").Replace(";", "") + "|ERROR/" + job.result  + "/Place";
+                //returnMsg = job.localVarMap["msg"].Replace("MCR", "ABS").Replace("GET", "ABS").Replace(";", "") + "|ERROR/" + job.result  + "/Place";
+                returnMsg = job.localVarMap["msg"].Replace("MCR", "ABS").Replace("GET", "ABS").Replace(";", "") + "|ERROR/" + job.result ;
             }
             Send(replayer, returnMsg + ";\r");//send INF or ABS
             #endregion
+        }
+        public void On_Marco_Print(string msg)
+        {
+            Send(replayer, msg + ";\r");//send INF or ABS
         }
 
     }

@@ -59,6 +59,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API.cs" />
+    <Compile Include="CommandConvert\CommandDecoder.cs" />
+    <Compile Include="CommandConvert\CommandEncoder.cs" />
+    <Compile Include="CommandConvert\CommandReturnMessage.cs" />
+    <Compile Include="CommandConvert\Encoder_Aligner.cs" />
+    <Compile Include="CommandConvert\Encoder_LoadPort.cs" />
+    <Compile Include="CommandConvert\Encoder_OCR.cs" />
+    <Compile Include="CommandConvert\Encoder_Robot.cs" />
+    <Compile Include="CommandConvert\Encoder_SmartTag.cs" />
     <Compile Include="Comm\ComPortClient.cs" />
     <Compile Include="Comm\DeviceConfig.cs" />
     <Compile Include="Comm\DeviceElement.cs" />

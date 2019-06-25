@@ -14,6 +14,7 @@ using static System.Net.Mime.MediaTypeNames;
 using SanwaMarco.Comm;
 using System.Xml;
 using SanwaMarco.Controller;
+using log4net;
 
 namespace SanwaMarco
 {
@@ -26,31 +27,32 @@ namespace SanwaMarco
     {
         public Dictionary<string, string> localVarMap = new Dictionary<string, string>();
         public string marcoName;
-        
+        private static readonly ILog logger = LogManager.GetLogger(typeof(ComPortClient));
+
         public JobUtil(string marcoName, Dictionary<string, string> localVarMap)
         {
             this.localVarMap = localVarMap;
             this.marcoName = marcoName;
         }
 
-        internal void Send(DeviceController device, string msg)
-        {
+        //internal void Send(DeviceController device, string msg)
+        //{
 
-            if (!device.Status.Equals("Connected"))//檢查連線
-                Console.WriteLine(device.Name + " Send:" + "未連線!");
-            else if (device.processState.Equals(DeviceController.PROCESS_STATE_INIT))
-                Console.WriteLine(device.Name + " Send:" + "未初始化!");
-            else if (!device.processState.Equals(DeviceController.PROCESS_STATE_IDLE))
-                Console.WriteLine(device.Name + " Send:" + "設備忙碌中或者未就緒!");
-            else
-            {
-                Console.WriteLine(device + " Send:" + msg);
-                //device.sendCommand(msg);
-                API api = new API();
-                api.doWork(device);
-            }
+        //    if (!device.Status.Equals("Connected"))//檢查連線
+        //        Console.WriteLine(device.Name + " Send:" + "未連線!");
+        //    else if (device.processState.Equals(DeviceController.PROCESS_STATE_INIT))
+        //        Console.WriteLine(device.Name + " Send:" + "未初始化!");
+        //    else if (!device.processState.Equals(DeviceController.PROCESS_STATE_IDLE))
+        //        Console.WriteLine(device.Name + " Send:" + "設備忙碌中或者未就緒!");
+        //    else
+        //    {
+        //        Console.WriteLine(device + " Send:" + msg);
+        //        //device.sendCommand(msg);
+        //        API api = new API(localVarMap);
+        //        api.doWork(device);
+        //    }
                 
-        }
+        //}
 
         public string function_name;
         public static Dictionary<string, Procedure> procedureMap = new Dictionary<string, Procedure>();
@@ -63,7 +65,6 @@ namespace SanwaMarco
         public const int LOG_LEVEL_DEBUG = 3;
         public int logMode = LOG_LEVEL_INFO;//LOG_LEVEL_DEBUG
         public string result;
-        StringBuilder log = new StringBuilder();
         string lastLine = "";
         //MessageReport msgReport = new MessageReport();
 
@@ -74,8 +75,8 @@ namespace SanwaMarco
 
         public void RunMarco()
         {
+            result = "RunMarco_Error";
             //localVarMap.Clear();//清除區域變數
-            log.Clear();//清除 log
             isFinish = false;
             string filePath = "marco\\" + marcoName + ".vb";
 
@@ -109,8 +110,8 @@ namespace SanwaMarco
                     comands.Add(line);//去掉頭尾空白
                 }
                 sr.Close();
-                parseMarco();
-                result = log.ToString();
+                result = parseMarco();
+                //result = log.ToString();
             }
             catch (DirectoryNotFoundException de)
             {
@@ -131,8 +132,9 @@ namespace SanwaMarco
             isFinish = true;
         }
 
-        private void parseMarco()
+        private string parseMarco()
         {
+            string parseResult = "parseResult";
             try
             {
                 for (int i = 0; i < comands.Count;)
@@ -277,17 +279,23 @@ namespace SanwaMarco
                     {
                         if (skipFlag == false)
                         {
-                            log.Append(ProcMarco(cmd));
+                            string lineResult = ProcMarco(cmd);
+                            if (!lineResult.Equals(""))
+                            {
+                                return lineResult;//有錯誤訊息，不繼續執行
+                            }
                         }
                     }
                     //END ELSE
 
                 }
+                parseResult = "";
             }
             catch (Exception e)
             {
                 error(e.StackTrace + " " + e.Message);
             }
+            return parseResult;
         }
 
         private bool checkRule(string rule)
@@ -307,7 +315,7 @@ namespace SanwaMarco
 
         public string ProcMarco(String line)
         {
-            StringBuilder result = new StringBuilder();
+            String result = "";
             //Step2: 優先處理 DECODE,CONCAT,ADD 指令
             if (line.Trim().Contains("DECODE("))
             {
@@ -344,20 +352,15 @@ namespace SanwaMarco
             {
                 //debug("↑宣告function 結束\n");//debug
             }
-            else if (line.Trim().StartsWith("RETURN("))
+            else if (line.Trim().StartsWith("RETURN(")|| line.Trim().StartsWith("Return ("))
             {
                 string _return = parseReturn(line.Trim());
                 if (_return != null)
                 {
                     isFinish = true;//return 條件成立, 之後不做了
-                    info(_return + "\n");
-                    //result.Append(_return + "\n");
+                    info(_return);
+                    result = _return;
                 }
-                //else
-                //{
-                //    result.Append("Return 式不成立，繼續執行.\n");
-                //}
-                   
             }
             else if (line.Trim().StartsWith("SETVAR("))
             {
@@ -380,13 +383,13 @@ namespace SanwaMarco
             else if (line.Trim().StartsWith("API("))
             {
                 //result.Append(line + "\n");//debug 用
-                result.Append(procAPI(line.Trim()));
+                result = procAPI(line.Trim());
             }
             else
             {
-                result.Append(line + "\n");//debug 用
-                result.Append("↑尚未處理\n");
-                //result.Append(processCode(line.Trim()));
+                return line.Substring(0, line.IndexOf(";")) + " parse error";
+                //result.Append(line + "\n");//debug 用
+                //result.Append("↑尚未處理\n");
             }
             return result.ToString();
         }
@@ -395,24 +398,21 @@ namespace SanwaMarco
         {
             if (logMode >= LOG_LEVEL_INFO)
             {
-                Console.WriteLine(msg, ConsoleColor.Gray);
-                log.Append(msg);
+                logger.Info(msg);
             }
         }
         private void warring(string msg)
         {
             if (logMode >= LOG_LEVEL_NORMAL)
             {
-                Console.WriteLine(msg, ConsoleColor.Blue);
-                log.Append(msg);
+                logger.Warn(msg);
             }
         }
         private void debug(string msg)
         {
             if (logMode >= LOG_LEVEL_DEBUG)
             {
-                Console.WriteLine(msg, ConsoleColor.Green);
-                log.Append(msg);
+                logger.Debug(msg);
             }
         }
         private void error(string msg)
@@ -420,8 +420,7 @@ namespace SanwaMarco
             msg = msg + "\nError Line:" + lastLine;
             if (logMode >= LOG_LEVEL_NORMAL)
             {
-                Console.WriteLine(msg , ConsoleColor.Red);
-                log.Append(msg);
+                logger.Error(msg);
             }
         }
         //private string parseCond(string exp)
@@ -594,11 +593,29 @@ namespace SanwaMarco
             Boolean result = false;
             try
             {
-                string[] tokens = func.Replace("SETVARS", "").Split(new char[] { '(', ',', ')',';' }, StringSplitOptions.RemoveEmptyEntries);
-                for(int i=0; i< tokens.Length; i= i+2)
+                //func = func.Replace("\", \"", "\",\"");
+                //string[] tokens = func.Replace("SETVARS", "").Split(new char[] { '(', ',', ')',';' }, StringSplitOptions.RemoveEmptyEntries);
+                //for(int i=0; i< tokens.Length; i= i+2)
+                //{
+                //    string key = tokens[i + 0].Trim().Replace("\"", "");
+                //    string value = tokens[i + 1].Trim().Replace("\"", "");
+                //    //value = parseCond(value);//kuma
+                //    setVar(key, value);
+                //    debug("Call [SETVARS]:" + " Arg1:" + key + ", Arg2:" + value + "\n");//debug
+                //}
+
+                // VS 工具會很雞婆的把格式做調整，如下
+                // SETVAR("@cmd","$1CMD:GETW_:1202,10,1"); => SETVAR("@cmd", "$1CMD:GETW_:1202,10,1");
+                // 所以新增.Replace("\", \"", "\",\"");
+                func = func.Replace("SETVARS(", "").Replace(");", "").Replace("\", \"", "\",\"");
+                RegexOptions options = ((RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline) | RegexOptions.IgnoreCase);
+
+                Regex reg = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)", options);
+                MatchCollection coll = reg.Matches(func);
+                for (int i = 0; i < coll.Count; i = i + 2)
                 {
-                    string key = tokens[i + 0].Trim().Replace("\"", "");
-                    string value = tokens[i + 1].Trim().Replace("\"", "");
+                    string key = coll[i].Value.Trim().Replace("\"", "");
+                    string value = coll[i + 1].Value.Trim().Replace("\"", "");
                     //value = parseCond(value);//kuma
                     setVar(key, value);
                     debug("Call [SETVARS]:" + " Arg1:" + key + ", Arg2:" + value + "\n");//debug
@@ -617,7 +634,10 @@ namespace SanwaMarco
             Boolean result = false;
             try
             {
-                func = func.Replace("SETVAR(", "").Replace(");", "");
+                // VS 工具會很雞婆的把格式做調整，如下
+                // SETVAR("@cmd","$1CMD:GETW_:1202,10,1"); => SETVAR("@cmd", "$1CMD:GETW_:1202,10,1");
+                // 所以新增.Replace("\", \"", "\",\"");
+                func = func.Replace("SETVAR(", "").Replace(");", "").Replace("\", \"", "\",\"");
                 string arg1 = "";
                 string arg2 = "";
                 RegexOptions options = ((RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline) | RegexOptions.IgnoreCase);
@@ -645,17 +665,17 @@ namespace SanwaMarco
         
         private string procAPI(string func)
         {
-            StringBuilder result = new StringBuilder();
+            String result = "";
             func = func.Replace("API(", "").Replace(");", "");
             string[] args = func.Split(',');
             string arg1 = args[0].Trim().Replace("\"", "");
             Boolean arg2 = args[1].Trim().Replace("\"", "").Equals("true") ? true : false;
             // 未指令 return code 時, 會使用 API 的預設 return code, 存在 method_result
             string arg3 = args.Length >= 3? args[2].Trim().Replace("\"", "") : "@" + arg1  + "_result";
-            API api = new API(arg1, arg2, arg3);//建構API
+            API api = new API(arg1, arg2, arg3, localVarMap);//建構API
             result = api.Run(); //呼叫API
-            result.Append("Call [API]:" + " Arg1:" + arg1 + ", Arg2:" + arg2 + ", Arg3:" + arg3 + "\n");//debug
-            return result.ToString();
+            logger.Debug("Call [API]:" + " Arg1:" + arg1 + ", Arg2:" + arg2 + ", Arg3:" + arg3 + "\n");
+            return result;
         }
         private Boolean procDelay(string func)
         {
@@ -710,18 +730,21 @@ namespace SanwaMarco
                         string temp = trimDoubleQuotes(foo);
                         msg = (msg != null ? msg : "") + temp;
                     }
-                    msg = msg + "\n";
+                    //msg = msg + "\n";
                 }
                 else
                 {
-                    msg = exp + "\n";
+                    //msg = exp + "\n";
+                    msg = exp;
                 }
                 info(msg);
+                Marco.Print(msg);
                 result = true;
             }
             catch(Exception e)
             {
                 error(e.StackTrace + " " + e.Message);
+                result = false;
             }
             return result;
         }
@@ -731,7 +754,7 @@ namespace SanwaMarco
         private string parseReturn(string func)
         {
             StringBuilder result = new StringBuilder();
-            func = func.Replace("RETURN(", "").Replace(");","").Trim();
+            func = func.Replace("RETURN(", "").Replace("Return (", "").Replace(");","").Trim();
             string arg1 = "";
             string arg2 = "";
             RegexOptions options = ((RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline) | RegexOptions.IgnoreCase);
