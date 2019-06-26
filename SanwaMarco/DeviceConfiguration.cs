@@ -165,5 +165,17 @@ namespace SanwaMarco
             }
         }
 
+        [ConfigurationProperty("file", DefaultValue = "", IsRequired = false)]
+        public string File
+        {
+            get
+            {
+                return this["file"] as string;
+            }
+            set
+            {
+                this["file"] = value;
+            }
+        }
     }
 }

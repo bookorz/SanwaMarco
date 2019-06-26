@@ -11,8 +11,10 @@ using System.Threading.Tasks;
 
 namespace SanwaMarco.Controller
 {
-    public class DeviceController : IConnectionReport
+    public class DeviceController : IConnectionReport, IDevice
     {
+        public const string PROCESS_STATE_NOT_CONNECT = "NOT_CONNECT";
+        public const string PROCESS_STATE_CONNECT_ERROR = "CONNECT_ERROR";
         public const string PROCESS_STATE_INIT = "INIT";
         public const string PROCESS_STATE_IDLE = "IDLE";
         public const string PROCESS_STATE_PROCESS = "PROCESS";
@@ -24,7 +26,7 @@ namespace SanwaMarco.Controller
         public DeviceConfig _Config;
         public string Name { get; set; }
         public string Status = "Disconnected";
-        public string processState = PROCESS_STATE_INIT;
+        public string processState = PROCESS_STATE_NOT_CONNECT;
         public string errorCode = "";
         CommandDecoder _Decoder;
 
@@ -117,7 +119,8 @@ namespace SanwaMarco.Controller
         void IConnectionReport.On_Connection_Error(string MsgObj)
         {
             this._IsConnected = false;
-            this.processState = DeviceController.PROCESS_STATE_ERROR;
+            //this.processState = DeviceController.PROCESS_STATE_ERROR;
+            this.processState = DeviceController.PROCESS_STATE_CONNECT_ERROR; 
         }
 
         void IConnectionReport.On_Connection_Message(object MsgObj)

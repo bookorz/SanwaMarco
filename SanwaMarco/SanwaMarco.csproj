@@ -74,12 +74,14 @@
     <Compile Include="Comm\ICommMessage.cs" />
     <Compile Include="Comm\IConnection.cs" />
     <Compile Include="Comm\IConnectionReport.cs" />
+    <Compile Include="Comm\IDevice.cs" />
     <Compile Include="Comm\TcpCommClient.cs" />
     <Compile Include="Controller\DeviceController.cs" />
     <Compile Include="Controller\DeviceNetCtrl.cs" />
     <Compile Include="DeviceConfiguration.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="GUICmdCtrl.cs" />
+    <Compile Include="I7565DNM.cs" />
     <Compile Include="Marco.cs" />
     <Compile Include="MessageReport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,6 +97,12 @@
     <Content Include="Lib\log4net.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
     <Content Include="Lib\NPOI.dll" />
+    <Content Include="marco\MARCO_SET.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco\MARCO_GET.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="marco\MARCO_TEST2.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

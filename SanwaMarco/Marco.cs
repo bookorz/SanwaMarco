@@ -30,9 +30,6 @@ namespace SanwaMarco
             {
                 SpinWait.SpinUntil(() => false, 1000);
             }
-            Console.WriteLine("-----------------------------------------");
-            Console.WriteLine(util.result);
-            Console.WriteLine("-----------------------------------------");
             _EventReport.On_Marco_Finish(util);
             //GUICmdCtrl.
         }
@@ -47,7 +44,7 @@ namespace SanwaMarco
             deviceMap.Clear();
             foreach (DeviceSettingElement foo in config.DeviceSettings)
             {
-                DeviceController dvcCtrl;
+                IDevice dvcCtrl;
                 //Console.WriteLine("--------------------------");
                 //Console.WriteLine(foo.Name);
                 //Console.WriteLine(foo.Enable);
@@ -85,6 +82,14 @@ namespace SanwaMarco
                     dc.ParityBit = foo.Com_Parity_Bit;
                     dc.StopBit = foo.Com_Stop_Bit;
                     dvcCtrl = new DeviceController(dc);
+                    dvcCtrl.start();
+                    Marco.deviceMap.Add(foo.Name, dvcCtrl);
+                }
+                else if (foo.Conn_Type.Equals("ICPDeviceNet"))
+                {
+                    dc.PortName = foo.Conn_Address;
+                    dc.File = foo.File;
+                    dvcCtrl = new I7565DNM(dc);
                     dvcCtrl.start();
                     Marco.deviceMap.Add(foo.Name, dvcCtrl);
                 }

@@ -391,7 +391,7 @@ namespace SanwaMarco
                 //result.Append(line + "\n");//debug 用
                 //result.Append("↑尚未處理\n");
             }
-            return result.ToString();
+            return result;
         }
 
         private void info(string msg)
@@ -593,17 +593,6 @@ namespace SanwaMarco
             Boolean result = false;
             try
             {
-                //func = func.Replace("\", \"", "\",\"");
-                //string[] tokens = func.Replace("SETVARS", "").Split(new char[] { '(', ',', ')',';' }, StringSplitOptions.RemoveEmptyEntries);
-                //for(int i=0; i< tokens.Length; i= i+2)
-                //{
-                //    string key = tokens[i + 0].Trim().Replace("\"", "");
-                //    string value = tokens[i + 1].Trim().Replace("\"", "");
-                //    //value = parseCond(value);//kuma
-                //    setVar(key, value);
-                //    debug("Call [SETVARS]:" + " Arg1:" + key + ", Arg2:" + value + "\n");//debug
-                //}
-
                 // VS 工具會很雞婆的把格式做調整，如下
                 // SETVAR("@cmd","$1CMD:GETW_:1202,10,1"); => SETVAR("@cmd", "$1CMD:GETW_:1202,10,1");
                 // 所以新增.Replace("\", \"", "\",\"");
@@ -647,10 +636,6 @@ namespace SanwaMarco
                 string[] items = new string[coll.Count];
                 arg1 = coll[0].Value.Trim().Replace("\"", "");
                 arg2 = coll[1].Value.Trim().Replace("\"", "");
-                //string[] args = func.Split(',');
-                //string arg1 = args[0].Trim().Replace("\"", "");
-                //string arg2 = args[1].Trim().Replace("\"", "");
-                //string value = parseCond(arg2);//kuma
                 string value = arg2;
                 setVar(arg1, value);
                 debug("Call [SETVAR]:" + " Arg1:" + arg1 + ", Arg2:" + arg2 + "\n");//debug
@@ -671,10 +656,12 @@ namespace SanwaMarco
             string arg1 = args[0].Trim().Replace("\"", "");
             Boolean arg2 = args[1].Trim().Replace("\"", "").Equals("true") ? true : false;
             // 未指令 return code 時, 會使用 API 的預設 return code, 存在 method_result
-            string arg3 = args.Length >= 3? args[2].Trim().Replace("\"", "") : "@" + arg1  + "_result";
+            string arg3 = args.Length >= 3? args[2].Trim().Replace("\"", "") : "@" + arg1  + "_RESULT";
             API api = new API(arg1, arg2, arg3, localVarMap);//建構API
-            result = api.Run(); //呼叫API
-            logger.Debug("Call [API]:" + " Arg1:" + arg1 + ", Arg2:" + arg2 + ", Arg3:" + arg3 + "\n");
+            string returnValue = "";
+            result = api.Run(ref returnValue); //呼叫API
+            localVarMap.Add(arg3, result);//set result
+            localVarMap.Add("@" + arg1 + "_RETURN", returnValue);//set return value
             return result;
         }
         private Boolean procDelay(string func)
@@ -688,11 +675,10 @@ namespace SanwaMarco
                 if (delay != 0)
                 {
                     Thread.Sleep(delay);
-                    debug("   ^^^^^^^^^^ Call [DELAY]:Thread.Sleep(" + time + ");\n");//debug
                 }
                 else
                 {
-                    error("Time format error:" + time + "\n");//debug
+                    error("DELAY Time format error:" + time + "\n");//debug
                 }
             }
             catch (Exception e)

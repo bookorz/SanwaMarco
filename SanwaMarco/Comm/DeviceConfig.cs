@@ -20,5 +20,6 @@ namespace SanwaMarco.Comm
         public int DataBits { get; set; }
         public string StopBit { get; set; }
         public bool Enable { get; set; }
+        public string File { get; set; }
     }
 }
