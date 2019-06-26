@@ -325,7 +325,12 @@ namespace SanwaMarco
                         argMap.Add("@name", rcvArgs[1]);//測試用參數2
                         Marco.RunMarco(func_name, argMap);
                         break;
-                    default:
+                    default://不須特別做參數處理的 function, 傳入之參數會依序放在 @arg1...@argn
+                        for (int i = 0; i < rcvArgs.Length; i++)
+                        {
+                            argMap.Add("@arg" + (i + 1), rcvArgs[i]);
+                        }
+                        Marco.RunMarco(func_name, argMap);
                         break;
                 }
                 #endregion

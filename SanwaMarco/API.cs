@@ -301,6 +301,12 @@ namespace SanwaMarco
                 case "ATEL_ROBOT_MOTION_CMD":
                     result = ATEL_ROBOT_MOTION_CMD();
                     break;
+                case "ATEL_ROBOT_SET_CMD":
+                    result = ATEL_ROBOT_SET_CMD();
+                    break;
+                case "ATEL_ROBOT_GET_CMD":
+                    result = ATEL_ROBOT_GET_CMD();
+                    break;
                 default:
                     result = method_name + " not support";
                     break;
@@ -310,17 +316,29 @@ namespace SanwaMarco
         #region ATEL Robot 控制
         private string ATEL_ROBOT_MOTION_CMD()
         {
-            string result = "";
+            string result = "ATEL_ROBOT_MOTION_CMD ERROR";
             string device = "";
             string cmd = "";
             DeviceController deviceCtrl = null;
             try
             {
-                if(!getAtlCmd(ref result, ref device, ref cmd, ref deviceCtrl))
+                if (!getAtlCmd(ref result, ref device, ref cmd, ref deviceCtrl))
                 {
                     return result;
                 }
-                result = cmd;
+                SpinWait.SpinUntil(() => deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE, 1000);
+                if (deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE)
+                {
+                    deviceCtrl.processState = DeviceController.PROCESS_STATE_PROCESS;
+                    deviceCtrl.sendCommand(cmd);
+                    //等待60秒
+                    SpinWait.SpinUntil(() => (deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE) || (deviceCtrl.processState == DeviceController.PROCESS_STATE_ERROR), 60000);
+                    result = deviceCtrl.errorCode;
+                }
+                else
+                {
+                    result = device + " is busy.";
+                }
                 return result;
             }
             catch (Exception e)
@@ -372,18 +390,9 @@ namespace SanwaMarco
                 {
                     return result;
                 }
-                SpinWait.SpinUntil(() => deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE, 1000);
-                if (deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE)
-                {
-                    deviceCtrl.sendCommand(cmd);
-                    //等待60秒
-                    SpinWait.SpinUntil(() => deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE, 60000);
-                    result = deviceCtrl.errorCode;
-                }
-                else
-                {
-                    result = device + " is busy.";
-                }
+                deviceCtrl.sendCommand(cmd);
+                result = deviceCtrl.errorCode;
+                return result;
                 return result;
             }
             catch (Exception e)
@@ -393,7 +402,7 @@ namespace SanwaMarco
         }
         private string ATEL_ROBOT_SET_CMD()
         {
-            string result = "";
+            string result = "ATEL_ROBOT_SET_CMD ERROR";
             string device = "";
             string cmd = "";
             DeviceController deviceCtrl = null;
@@ -403,7 +412,8 @@ namespace SanwaMarco
                 {
                     return result;
                 }
-                result = cmd;
+                deviceCtrl.sendCommand(cmd);
+                result = deviceCtrl.errorCode;
                 return result;
             }
             catch (Exception e)

@@ -1,5 +1,6 @@
 ﻿using log4net;
 using SanwaMarco.Comm;
+using SanwaMarco.CommandConvert;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace SanwaMarco.Controller
         public string Status = "Disconnected";
         public string processState = PROCESS_STATE_INIT;
         public string errorCode = "";
+        CommandDecoder _Decoder;
 
         private bool _IsConnected { get; set; }
         public int TrxNo = 1;
@@ -35,6 +37,7 @@ namespace SanwaMarco.Controller
         public DeviceController(DeviceConfig Config)
         {
             _Config = Config;
+            _Decoder = new CommandConvert.CommandDecoder(_Config.Vendor);
 
             switch (Config.ConnectionType)
             {
@@ -65,7 +68,6 @@ namespace SanwaMarco.Controller
                 }
                 if (_Config.Vendor.ToUpper().Equals("SANWA"))
                     msg = msg + "\r";
-                processState = DeviceController.PROCESS_STATE_PROCESS;
                 conn.Send(msg);
                 result = true;
             }
@@ -91,35 +93,63 @@ namespace SanwaMarco.Controller
             return result;
         }
 
-        void IConnectionReport.On_Connection_Connected(object Msg)
+        void IConnectionReport.On_Connection_Connected(object MsgObj)
         {
             this._IsConnected = true;
             this.Status = "Connected";
-            this.processState = DeviceController.PROCESS_STATE_INIT;
+            //this.processState = DeviceController.PROCESS_STATE_INIT;
+            this.processState = DeviceController.PROCESS_STATE_IDLE;
         }
 
-        void IConnectionReport.On_Connection_Connecting(string Msg)
+        void IConnectionReport.On_Connection_Connecting(string MsgObj)
         {
             this._IsConnected = false;
             this.Status = "Connecting";
         }
 
-        void IConnectionReport.On_Connection_Disconnected(string Msg)
+        void IConnectionReport.On_Connection_Disconnected(string MsgObj)
         {
             this._IsConnected = false;
             this.Status = "Disconnected";
             this.processState = DeviceController.PROCESS_STATE_UNKNOWN;
         }
 
-        void IConnectionReport.On_Connection_Error(string Msg)
+        void IConnectionReport.On_Connection_Error(string MsgObj)
         {
             this._IsConnected = false;
             this.processState = DeviceController.PROCESS_STATE_ERROR;
         }
 
-        void IConnectionReport.On_Connection_Message(object Msg)
+        void IConnectionReport.On_Connection_Message(object MsgObj)
         {
-            Console.WriteLine(_Config.DeviceName + " Receive: " + Msg);
+            string msg = (string)MsgObj;
+            msg = msg.Replace("\r", "");
+            logger.Debug(_Config.DeviceName + " Recieve:" + msg);
+            string cmdType = msg.Substring(2,3);
+            switch (cmdType)
+            {
+                case "NAK":
+                    processState = PROCESS_STATE_ERROR;
+                    errorCode = msg.Substring(msg.LastIndexOf(":") + 1, 8);
+                    break;
+                case "FIN":
+                    string returnCode = msg.Substring(msg.LastIndexOf(":") + 1, 8);
+                    if (returnCode.Equals("00000000")){
+                        processState = PROCESS_STATE_IDLE;
+                    }
+                    else
+                    {
+                        processState = PROCESS_STATE_ERROR;
+                        errorCode = returnCode;
+                    }
+                    break;
+            }
+                
+            //List<CommandReturnMessage> ReturnMsgList = _Decoder.GetMessage(Msg);
+            //foreach (CommandReturnMessage ReturnMsg in ReturnMsgList)
+            //{
+            //    Console.WriteLine(ReturnMsg.CommandType + ":" + ReturnMsg);
+            //}
         }
     }
 

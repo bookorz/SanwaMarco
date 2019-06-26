@@ -95,6 +95,9 @@
     <Content Include="Lib\log4net.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
     <Content Include="Lib\NPOI.dll" />
+    <Content Include="marco\MARCO_TEST2.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="marco\MARCO_TEST.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

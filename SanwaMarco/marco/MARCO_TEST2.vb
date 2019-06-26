@@ -16,12 +16,10 @@
 	'SETVAR("@cmd", "$1CMD:GETW_:1202,10,1");'$1CMD:GETW_:pno,slot,arm[CR]
  '   PRINT("@cmd:@<cmd>");'DEBUG:檢查值
  '   DELAY(100);
-    SETVAR("@pno", "1202");
+    SETVAR("@pno", "1201");
     SETVAR("@slot", "10");
     SETVAR("@arm", "2");
 	'SETVAR("@cmd", "$1CMD:GETW_:@<pno>,@<slot>,@<arm>");'$1CMD:GETW_:pno,slot,arm[CR]
-    SETVARS("@device", "Robot01", "@cmd", "$1SET:MODE_:1");
-    API("ATEL_ROBOT_SET_CMD", True);
     SETVARS("@device", "Robot01", "@cmd", "$1CMD:GET__:@<pno>,@<slot>,@<arm>,0,0");
     API("ATEL_ROBOT_MOTION_CMD", True);	
 	'PRINT("@value:@<value>");'DEBUG:檢查值
