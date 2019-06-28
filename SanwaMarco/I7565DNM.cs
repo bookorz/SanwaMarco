@@ -200,7 +200,8 @@ namespace SanwaMarco
                     ODATA[0] = IODATA[1];//只有1 byte , ODATA 需去掉 input 的部分
                                          //Step4 將ODATA寫入模組
                 Ret = I7565DNM_DotNET.I7565DNM.I7565DNM_WriteOutputData(cPort, DesMACID, dnm.ConType(), dnm.DeviceOutputLen, ODATA);
-                setError(Ret.ToString());
+                if(Ret != 0)
+                    setError(Ret.ToString());
                 return Ret;
             }
             catch (Exception e)

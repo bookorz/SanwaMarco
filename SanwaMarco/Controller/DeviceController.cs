@@ -69,7 +69,8 @@ namespace SanwaMarco.Controller
                     return false;
                 }
                 if (_Config.Vendor.ToUpper().Equals("SANWA"))
-                    msg = msg + "\r";
+                    msg = msg + "\r"; ;
+                logger.Debug(_Config.DeviceName + " Send:" + msg);
                 conn.Send(msg);
                 result = true;
             }
@@ -131,6 +132,10 @@ namespace SanwaMarco.Controller
             string cmdType = msg.Substring(2,3);
             switch (cmdType)
             {
+                case "ACK":
+                    if (msg.Equals("$1ACK:RESET"))
+                        processState = PROCESS_STATE_IDLE;
+                    break;
                 case "NAK":
                     processState = PROCESS_STATE_ERROR;
                     errorCode = msg.Substring(msg.LastIndexOf(":") + 1, 8);

@@ -284,32 +284,6 @@ namespace SanwaMarco
                         Marco.RunMarco(func_name, argMap);
                         break;
                     #region Robot 指令
-                    case "ROBOT_INIT":
-                    case "ROBOT_RESET":
-                    case "ROBOT_HOME":
-                    case "ROBOT_ORG":
-                        Marco.RunMarco(func_name, argMap);
-                        break;
-                    case "ROBOT_SPEED":
-                        argMap.Add("@speed", rcvArgs[0]);
-                        Marco.RunMarco(func_name, argMap);
-                        break;
-                    case "ROBOT_PUT":
-                        argMap.Add("@dest", rcvArgs[0]);//dest : P101, SHELF1, ... 等等; 讓Marco 自行處理可辨識的名稱
-                        Marco.RunMarco(func_name, argMap);
-                        break;
-                    case "ROBOT_PUTW":
-                        argMap.Add("@dest", rcvArgs[0]);//dest : P101, SHELF1, ... 等等; 讓Marco 自行處理可辨識的名稱
-                        Marco.RunMarco(func_name, argMap);
-                        break;
-                    case "ROBOT_GET":
-                        argMap.Add("@src", rcvArgs[0]);//src : P101, SHELF1, ... 等等; 讓Marco 自行處理可辨識的名稱
-                        Marco.RunMarco(func_name, argMap);
-                        break;
-                    case "ROBOT_GETW":
-                        argMap.Add("@src", rcvArgs[0]);//src : P101, SHELF1, ... 等等; 讓Marco 自行處理可辨識的名稱
-                        Marco.RunMarco(func_name, argMap);
-                        break;
                     case "ROBOT_CARRY":
                         argMap.Add("@src", rcvArgs[0]);//src : P101, SHELF1, ... 等等; 讓Marco 自行處理可辨識的名稱
                         argMap.Add("@dest", rcvArgs[1]);//dest : P101, SHELF1, ... 等等; 讓Marco 自行處理可辨識的名稱
@@ -389,7 +363,7 @@ namespace SanwaMarco
             string returnMsg = "";
             JobUtil job = (JobUtil) obj;
             #region 回傳訊息
-            if (job.result.Equals(""))
+            if (job.jobResult.Equals(""))
             {
                 //INF
                 //returnMsg = msg.Replace("MCR", "INF").Replace("GET", "INF").Replace("SET", "INF").Replace(";", "");
@@ -399,7 +373,7 @@ namespace SanwaMarco
             {
                 //ABS
                 //returnMsg = job.localVarMap["msg"].Replace("MCR", "ABS").Replace("GET", "ABS").Replace(";", "") + "|ERROR/" + job.result  + "/Place";
-                returnMsg = job.localVarMap["msg"].Replace("MCR", "ABS").Replace("GET", "ABS").Replace(";", "") + "|ERROR/" + job.result ;
+                returnMsg = job.localVarMap["msg"].Replace("MCR", "ABS").Replace("GET", "ABS").Replace(";", "") + "|ERROR/" + job.jobResult ;
             }
             Send(replayer, returnMsg + ";\r");//send INF or ABS
             #endregion

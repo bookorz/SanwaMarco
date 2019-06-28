@@ -1,9 +1,5 @@
 Function RobotOrg() AS String;
-	'Set Controller
-    SETVAR("@controller","$1");
-
-    API("ATEL_ROBOT_ORG", true);
-	
-    RETURN("@<ATEL_ROBOT_ORG_RESULT>");
-
+	SETVAR("@device", "Robot01");
+	SETVAR("@cmd", "$1CMD:ORG__");
+    API("ATEL_ROBOT_MOTION_CMD", True);	
 End Function;

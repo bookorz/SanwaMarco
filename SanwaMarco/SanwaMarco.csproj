@@ -110,11 +110,19 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="marco\ROBOT_CARRY.vb" />
-    <Content Include="marco\ROBOT_GET.vb" />
+    <Content Include="marco\ROBOT_GET.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="marco\ROBOT_PRESENCE.vb" />
-    <Content Include="marco\ROBOT_GETW.vb" />
-    <Content Include="marco\ROBOT_PUT.vb" />
-    <Content Include="marco\ROBOT_PUTW.vb" />
+    <Content Include="marco\ROBOT_GETW.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco\ROBOT_PUT.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco\ROBOT_PUTW.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="marco\ROBOT_HOME.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -125,6 +133,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="marco\ROBOT_RESET.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco\ROBOT_SERVO_ON.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="marco\ROBOT_SPEED.vb">

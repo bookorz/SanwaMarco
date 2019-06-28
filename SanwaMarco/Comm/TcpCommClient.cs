@@ -57,8 +57,11 @@ namespace SanwaMarco.Comm
         {
             try
             {
-                tcpClient.Client.Shutdown(SocketShutdown.Both);
-                tcpClient.Client.Disconnect(false);
+                if (tcpClient.Connected)
+                {
+                    tcpClient.Client.Shutdown(SocketShutdown.Both);
+                    tcpClient.Client.Disconnect(false);
+                }
             }
             catch (Exception e)
             {

@@ -1,20 +1,37 @@
-Function RobotGetWait() AS String;
-
-    'SETVAR("@dest","SHELF45");'DEBUG:設定值測試
-    '檢查參數,目的地不存在時, return NAK 
-    RETURN("NAK:dest_empty","'@<dest>' = 'undefined'");
+Function RobotGetWait();
+    RETURN("SOURCE Empty","'@<arg1>' = 'undefined'");
     '設定點位(方便閱讀，拆成5行)
-	SETVAR("@point",DECODE("@<dest>","ELPT1",1,"ELPT2",2,"ILPT1",3,"ILPT2",4,"@<point>"));
-	SETVAR("@point",DECODE("@<dest>","SHELF11",11,"SHELF12",12,"SHELF13",13,"SHELF14",14,"SHELF15",15,"@<point>"));
-	SETVAR("@point",DECODE("@<dest>","SHELF21",21,"SHELF22",22,"SHELF23",23,"SHELF24",24,"SHELF25",25,"@<point>"));
-	SETVAR("@point",DECODE("@<dest>","SHELF31",31,"SHELF32",32,"SHELF33",33,"SHELF34",34,"@<point>"));
-	SETVAR("@point",DECODE("@<dest>","SHELF41",41,"SHELF42",42,"SHELF43",43,"SHELF44",44,"@<point>"));
-	RETURN("NAK:point_unknow,@<dest>","'@<point>' = 'undefined'");
-		
-	SETVAR("@controller","$1");
-
-    API("ATEL_ROBOT_GET_WAIT", true, "ERR:99999999");
-	'PRINT("@controller:@<controller>,@psCheckDelay:@<psCheckDelay>,@dest:@<dest>,@point:@<point>");'DEBUG:檢查值
-	RETURN("@<ATEL_ROBOT_GET_WAIT_RESULT>");
-
+	SETVAR("@point",DECODE("@<arg1>","P1","0001","P2","0002","P3","0003","P4","0004","@<point>"));
+	SETVAR("@point",DECODE("@<arg1>","BF11","0011","BF12","0012","BF13","0013","BF14","0014","BF15","0015","@<point>"));
+	SETVAR("@point",DECODE("@<arg1>","BF21","0021","BF22","0022","BF23","0023","BF24","0024","BF25","0025","@<point>"));
+	SETVAR("@point",DECODE("@<arg1>","BF31","0031","BF32","0032","BF33","0033","BF34","0034","@<point>"));
+	SETVAR("@point",DECODE("@<arg1>","BF41","0041","BF42","0042","BF43","0043","BF44","0044","@<point>"));
+	RETURN("point_unknow,@<arg1>","'@<point>' = 'undefined'");
+	
+	'檢查來源地在席 io Sensor
+	SETVAR("@io",DECODE("@<arg1>","P1",101;102;103;2004;2005,"P2",201;202;203;2104;2105,"P3",301;302;303,"P4",309;310;311,"@<io>"));
+	SETVAR("@io",DECODE("@<arg1>","BF11",500;501,"BF12",508;509,"BF13",600;601,"BF14",608;609,"BF15",808;809,"@<io>"));
+	SETVAR("@io",DECODE("@<arg1>","BF21",502;503,"BF22",510;511,"BF23",602;603,"BF24",610;611,"BF25",810;811,"@<io>"));
+	SETVAR("@io",DECODE("@<arg1>","BF31",504;505,"BF32",512;513,"BF33",604;605,"BF34",812;813,"@<io>"));
+	SETVAR("@io",DECODE("@<arg1>","BF41",506;507,"BF42",514;515,"BF43",606;607,"BF44",814;815,"@<io>"));
+	RETURN("sensor_unknow,@<arg1>","'@<io>' = 'undefined'");
+	'檢查實際IO
+	SETVAR("@interval", "100");
+	SETVAR("@retry_count", "10");
+	IF("'@<arg1>' in ('P1','P2')")
+		SETVAR("@values", "00000");
+	ELSEIF("'@<arg1>' in ('P3','P4')")
+		SETVAR("@values", "000");
+	ELSE
+		SETVAR("@values", "00");
+	ENDIF
+	'RETURN("io sensors @<io> need value:@<values>");
+	'檢查IO
+    SETVAR("@device", "DNM01");
+    API("I7565DNM_CHECK_IOS", True);
+	
+	'執行GETW
+	SETVAR("@device", "Robot01");
+	SETVAR("@cmd", "$1CMD:GETW_:@<point>");
+    API("ATEL_ROBOT_MOTION_CMD", True);	
 End Function;

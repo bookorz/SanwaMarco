@@ -64,7 +64,7 @@ namespace SanwaMarco
         public const int LOG_LEVEL_INFO = 2;
         public const int LOG_LEVEL_DEBUG = 3;
         public int logMode = LOG_LEVEL_INFO;//LOG_LEVEL_DEBUG
-        public string result;
+        public string jobResult;
         string lastLine = "";
         //MessageReport msgReport = new MessageReport();
 
@@ -75,7 +75,7 @@ namespace SanwaMarco
 
         public void RunMarco()
         {
-            result = "RunMarco_Error";
+            jobResult = "RunMarco_Error";
             //localVarMap.Clear();//清除區域變數
             isFinish = false;
             string filePath = "marco\\" + marcoName + ".vb";
@@ -110,31 +110,31 @@ namespace SanwaMarco
                     comands.Add(line);//去掉頭尾空白
                 }
                 sr.Close();
-                result = parseMarco();
+                jobResult = parseMarco();
                 //result = log.ToString();
             }
             catch (DirectoryNotFoundException de)
             {
                 error(filePath + "路徑不存在.\n" + de.StackTrace + " " + de.Message);
-                result = filePath + "路徑不存在.\n" + de.StackTrace + " " + de.Message;
+                jobResult = filePath + "路徑不存在.\n" + de.StackTrace + " " + de.Message;
             }
             catch (FileNotFoundException fe )
             {
                 error(filePath + "檔案不存在.\n" + fe.StackTrace + " " + fe.Message);
-                result = filePath + "檔案不存在.\n" + fe.StackTrace + " " + fe.Message;
+                jobResult = filePath + "檔案不存在.\n" + fe.StackTrace + " " + fe.Message;
             }
             catch (Exception e)
             {
 
                 error(e.StackTrace + " " + e.Message);
-                result = e.StackTrace + " " + e.Message;
+                jobResult = e.StackTrace + " " + e.Message;
             }
             isFinish = true;
         }
 
         private string parseMarco()
         {
-            string parseResult = "parseResult";
+            string parseResult = "ParseMarco Error";
             try
             {
                 for (int i = 0; i < comands.Count;)
@@ -142,6 +142,7 @@ namespace SanwaMarco
                     if (isFinish)
                         break;//命令中斷旗標已打開, 跳出 marco 處理
                     string cmd = (String)comands[i];
+                    logger.Debug("parseMarco:" + cmd);
                     lastLine = cmd;//紀錄目前處理的 line
                     cmd = parseLine(cmd);//kuma
 
@@ -294,6 +295,7 @@ namespace SanwaMarco
             catch (Exception e)
             {
                 error(e.StackTrace + " " + e.Message);
+                parseResult = e.StackTrace;
             }
             return parseResult;
         }
@@ -650,18 +652,30 @@ namespace SanwaMarco
         
         private string procAPI(string func)
         {
-            String result = "";
-            func = func.Replace("API(", "").Replace(");", "");
-            string[] args = func.Split(',');
-            string arg1 = args[0].Trim().Replace("\"", "");
-            Boolean arg2 = args[1].Trim().Replace("\"", "").Equals("true") ? true : false;
-            // 未指令 return code 時, 會使用 API 的預設 return code, 存在 method_result
-            string arg3 = args.Length >= 3? args[2].Trim().Replace("\"", "") : "@" + arg1  + "_RESULT";
-            API api = new API(arg1, arg2, arg3, localVarMap);//建構API
+            string arg1 = "";
+            Boolean arg2;
+            string arg3 = "";
             string returnValue = "";
-            result = api.Run(ref returnValue); //呼叫API
-            localVarMap.Add(arg3, result);//set result
-            localVarMap.Add("@" + arg1 + "_RETURN", returnValue);//set return value
+            String result = "";
+            try
+            {
+                func = func.Replace("API(", "").Replace(");", "");
+                string[] args = func.Split(',');
+                arg1 = args[0].Trim().Replace("\"", "");
+                arg2 = args[1].Trim().Replace("\"", "").Equals("true") ? true : false;
+                // 未指令 return code 時, 會使用 API 的預設 return code, 存在 method_result
+                arg3 = args.Length >= 3 ? args[2].Trim().Replace("\"", "") : "@" + arg1 + "_RESULT";
+                API api = new API(arg1, arg2, arg3, localVarMap);//建構API
+                result = api.Run(ref returnValue); //呼叫API
+            }
+            catch (Exception e)
+            {
+                logger.Error("procAPI:" + func + " error." + e.StackTrace);
+            }
+            if(!arg3.Equals(""))
+                localVarMap[arg3] = jobResult;//set result
+            if (!arg1.Equals(""))
+                localVarMap["@" + arg1 + "_RETURN"] = returnValue;//set return value
             return result;
         }
         private Boolean procDelay(string func)
