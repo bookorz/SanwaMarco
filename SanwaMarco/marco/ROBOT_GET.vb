@@ -10,23 +10,23 @@ Function RobotGet();
 	
 	'檢查來源地在席 io Sensor
 	SETVAR("@io",DECODE("@<arg1>","P1",101;102;103;2004;2005,"P2",201;202;203;2104;2105,"P3",301;302;303,"P4",309;310;311,"@<io>"));
-	SETVAR("@io",DECODE("@<arg1>","BF11",500;501,"BF12",508;509,"BF13",600;601,"BF14",608;609,"BF15",808;809,"@<io>"));
-	SETVAR("@io",DECODE("@<arg1>","BF21",502;503,"BF22",510;511,"BF23",602;603,"BF24",610;611,"BF25",810;811,"@<io>"));
-	SETVAR("@io",DECODE("@<arg1>","BF31",504;505,"BF32",512;513,"BF33",604;605,"BF34",812;813,"@<io>"));
-	SETVAR("@io",DECODE("@<arg1>","BF41",506;507,"BF42",514;515,"BF43",606;607,"BF44",814;815,"@<io>"));
-	RETURN("sensor_unknow,@<arg1>","'@<io>' = 'undefined'");
+	SETVAR("@io", DECODE("@<arg1>", "BF11", 500;501, "BF12", 504;505, "BF13", 508;509, "BF14", 512;513, "BF15", 808;809, "@<io>"));
+	SETVAR("@io", DECODE("@<arg1>", "BF21", 502;503, "BF22", 506;507, "BF23", 510;511, "BF24", 514;515, "BF25", 810;811, "@<io>"));
+	SETVAR("@io", DECODE("@<arg1>", "BF31", 600;601, "BF32", 604;605, "BF33", 608;609, "BF34", 812;813, "@<io>"));
+	SETVAR("@io", DECODE("@<arg1>", "BF41", 602;603, "BF42", 606;607, "BF43", 610;611, "BF44", 814;815, "@<io>"));
+	Return ("sensor_unknow,@<arg1>", "'@<io>' = 'undefined'");
 	'檢查實際IO
 	SETVAR("@interval", "100");
 	SETVAR("@retry_count", "10");
 	IF("'@<arg1>' in ('P1','P2')")
-		SETVAR("@values", "00000");
+        SETVAR("@values", "00000");
 	ELSEIF("'@<arg1>' in ('P3','P4')")
-		SETVAR("@values", "000");
+        SETVAR("@values", "000");
 	ELSE
-		SETVAR("@values", "00");
+        SETVAR("@values", "00");
 	ENDIF
-	'RETURN("io sensors @<io> need value:@<values>");
-	'檢查IO
+    'RETURN("io sensors @<io> need value:@<values>");
+    '檢查IO
     SETVAR("@device", "DNM01");
     API("I7565DNM_CHECK_IOS", True);
 	
@@ -35,17 +35,16 @@ Function RobotGet();
 	SETVAR("@cmd", "$1CMD:GET__:@<point>");
     API("ATEL_ROBOT_MOTION_CMD", True);	
 	
-	'檢查實際IO
+	'取完後檢查實際IO
 	SETVAR("@interval", "100");
 	SETVAR("@retry_count", "10");
 	IF("'@<arg1>' in ('P1','P2')")
-		SETVAR("@values", "11100");
+        SETVAR("@values", "11100");
 	ELSEIF("'@<arg1>' in ('P3','P4')")
-		SETVAR("@values", "111");
+        SETVAR("@values", "111");
 	ELSE
-		SETVAR("@values", "11");
+        SETVAR("@values", "11");
 	ENDIF
-	'檢查IO
     SETVAR("@device", "DNM01");
     API("I7565DNM_CHECK_IOS", True);
 	

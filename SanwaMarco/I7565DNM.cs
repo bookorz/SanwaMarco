@@ -22,6 +22,24 @@ namespace SanwaMarco
         public string errorCode = "";
         string portNo;
 
+        public uint I7565DNM_REFRESH()
+        {
+            clearError();
+            byte cPort = Byte.Parse(portNo);//covert port id to byte
+            foreach (KeyValuePair<string, DeviceNetCtrl> foo in deviceNetCtrlMap)
+            {
+                if (!foo.Value.ModuleName.ToLower().Equals("none"))//None => 未使用
+                {
+                    UInt32 Ret = foo.Value.Refresh(cPort);
+                    if (Ret != 0)
+                    {
+                        setError(Ret.ToString());
+                        return Ret;
+                    }
+                }
+            }
+            return 0;
+        }
         public I7565DNM(DeviceConfig Config)
         {
             _Config = Config;
@@ -86,16 +104,9 @@ namespace SanwaMarco
             byte DesMACID = dnm.getDesMACID();//get macid
             return I7565DNM_DotNET.I7565DNM.I7565DNM_GetSlaveStatus(cPort, DesMACID);
         }
-        public Byte[] KUMA_GETIO(string desMACID)
-        {
-            UInt16 IOLen = 0;
-            Byte[] IODATA = new Byte[512];
-            byte DesMACID = Byte.Parse(desMACID);
-            uint ret = I7565DNM_DotNET.I7565DNM.I7565DNM_ReadInputData(7, DesMACID, (Byte)I7565DNM_DotNET.I7565DNM.ConType.ConType_Poll, ref IOLen, IODATA);
-            return IODATA;
-        }
+
         //泓格 I7565DNM 讀取模組IO
-        public uint I7565DNM_GETIO(string ioNo)
+        public uint I7565DNM_GETIO(string ioNo, bool isForceRefresh)
         {
             clearError();
             int boardNo;
@@ -120,14 +131,16 @@ namespace SanwaMarco
                     return 20001;//unkonw
                 }
                 DeviceNetCtrl dnm = deviceNetCtrlMap[boardNo.ToString()];
-                UInt16 IOLen = 0;
-                Byte[] IODATA = new Byte[512];
+                //Byte[] IODATA = new Byte[512];
                 byte cPort = Byte.Parse(portNo);//covert port id to byte
-                byte DesMACID = dnm.getDesMACID();//get macid
-                UInt32 Ret = I7565DNM_DotNET.I7565DNM.I7565DNM_ReadInputData(cPort, DesMACID, dnm.ConType(), ref IOLen, IODATA);
-                uint temp = io > 8 ? IODATA[1] : IODATA[0];
+                if (isForceRefresh)
+                {
+                    UInt32 Ret = dnm.Refresh(cPort);
+                    if (Ret != 0)
+                        return Ret;
+                }
+                uint temp = io > 8 ? dnm.IODATA[1] : dnm.IODATA[0];
                 int bit = io > 8 ? io - 8 - 1 : io - 1;
-                //return 1; 測試用
                 return (temp >> bit) & 1;//向右移動N-1位後, 與 00000001 做 AND 運算
             }
             catch (Exception e)
@@ -137,7 +150,47 @@ namespace SanwaMarco
                 return 90001;
             }
         }
-
+        /// <summary>
+        /// 從記憶體讀Input 資料，減少重複問資料，使用前請先 REFRESH 更新暫存資料
+        /// </summary>
+        /// <param name="ioNo"></param>
+        /// <returns></returns>
+        public uint I7565DNM_READIO(string ioNo)
+        {
+            clearError();
+            int boardNo;
+            int io;
+            try
+            {
+                if (ioNo.Length == 3)
+                {
+                    boardNo = int.Parse(ioNo.Substring(0, 1));
+                    io = int.Parse(ioNo.Substring(1));
+                }
+                else
+                {
+                    boardNo = int.Parse(ioNo.Substring(0, 2));
+                    io = int.Parse(ioNo.Substring(2));
+                }
+                io = io + 1;//IO定義表從0開始
+                if (deviceNetCtrlMap.Count < boardNo)
+                {
+                    //logger.Error("boardNo:" + boardNo + "< deviceNetCtrlMap.Count:" + deviceNetCtrlMap.Count);
+                    setError("20001");
+                    return 20001;//unkonw
+                }
+                DeviceNetCtrl dnm = deviceNetCtrlMap[boardNo.ToString()];                
+                uint temp = io > 8 ? dnm.IODATA[1] : dnm.IODATA[0];
+                int bit = io > 8 ? io - 8 - 1 : io - 1;
+                return (temp >> bit) & 1;//向右移動N-1位後, 與 00000001 做 AND 運算
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.StackTrace);
+                setError("90003");//讀取暫存 Input 值異常
+                return 90003;//讀取暫存 Input 值異常
+            }
+        }
         private void clearError()
         {
             errorCode = "";
@@ -172,35 +225,26 @@ namespace SanwaMarco
                     setError("20001");
                     return 20001;
                 }
-                    
+
+                if (boardNo == 11 || boardNo == 12 || boardNo == 14 || ioNo.Equals("904") || ioNo.Equals("905") || ioNo.Equals("906") || ioNo.Equals("907"))
+                {
+                    return 0;//B部 和 shutter 暫時不控制 
+                }
                 DeviceNetCtrl dnm = deviceNetCtrlMap[boardNo.ToString()];//boardNo: 0~63
-                UInt16 IOLen = 0;
-                Byte[] IODATA = new Byte[512];
-                Byte[] ODATA = new Byte[512];
+                //舊抓法
+                //UInt16 IOLen = 0;
+                //byte cPort = Byte.Parse(portNo);//covert port id to byte
+                //byte DesMACID = dnm.getDesMACID();//get macid
+                //                                  //Step 1 先取得目前IO
+                //UInt32 Ret = I7565DNM_DotNET.I7565DNM.I7565DNM_ReadInputData(cPort, DesMACID, dnm.ConType(), ref IOLen, dnm.IODATA);
+
                 byte cPort = Byte.Parse(portNo);//covert port id to byte
-                byte DesMACID = dnm.getDesMACID();//get macid
-                                                  //Step 1 先取得目前IO
-                UInt32 Ret = I7565DNM_DotNET.I7565DNM.I7565DNM_ReadInputData(cPort, DesMACID, dnm.ConType(), ref IOLen, IODATA);
+                ////Step 1 先更新目前IO
+                //UInt32 Ret = dnm.Refresh(cPort);//應該不用更新
+
                 //Step 2 變更IO data
-                //i = i | BIT(x); //set bit   : 與 00000001 做 OR 運算
-                //i = i & ~BIT(x);//clear bit : 與 11111110 做 AND 運算
-                uint temp = io > 8 ? IODATA[1] : IODATA[0];
-                if (io > 8)
-                {
-                    IODATA[1] = (byte)(value == 0 ? IODATA[1] & ~BIT(io - 8) : IODATA[1] | BIT(io - 8));//0: clear , 1:set
-                }
-                else
-                {
-                    IODATA[0] = (byte)(value == 0 ? IODATA[0] & ~BIT(io) : IODATA[0] | BIT(io));//0: clear , 1:set
-                }
-                //Step 3 置換ODATA
-                if (dnm.DeviceOutputLen == 2)
-                    ODATA = IODATA;//此模組都是OUTPUT
-                else
-                    ODATA[0] = IODATA[1];//只有1 byte , ODATA 需去掉 input 的部分
-                                         //Step4 將ODATA寫入模組
-                Ret = I7565DNM_DotNET.I7565DNM.I7565DNM_WriteOutputData(cPort, DesMACID, dnm.ConType(), dnm.DeviceOutputLen, ODATA);
-                if(Ret != 0)
+                UInt32 Ret = dnm.SetIO(cPort, io, value);
+                if (Ret != 0)
                     setError(Ret.ToString());
                 return Ret;
             }
@@ -301,12 +345,6 @@ namespace SanwaMarco
         }
         #endregion
 
-        //取得BIT位移, 供byte set or clear 運算使用
-        private int BIT(int x)
-        {
-            int idx = x - 1;
-            return 1 << idx;
-        }
 
         bool IDevice.start()
         {

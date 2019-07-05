@@ -116,7 +116,7 @@ namespace SanwaMarco
             handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                 new AsyncCallback(ReadCallback), state);
         }
-
+        string S = "";
         public void ReadCallback(IAsyncResult ar)
         {
             try
@@ -140,15 +140,18 @@ namespace SanwaMarco
 
                     // Check for end-of-file tag. If it is not there, read   
                     // more data.  
-                    content = state.sb.ToString();
+                    content = S + state.sb.ToString();//kuma add +
                     if (content.IndexOf("\r") > -1 || content.IndexOf(Convert.ToChar(3)) != -1)
                     {
                         // All the data has been read from the   
                         // client. Display it on the console.  
                         //Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
                         //    content.Length, content);
+                        string data = "";
+                        data = content.Substring(0,content.LastIndexOf("\r"));
+                        S = content.Substring(content.LastIndexOf("\r") + 1);
                         state.sb.Clear();
-                        _EventReport.On_Connection_Message(handler, content);
+                        _EventReport.On_Connection_Message(handler, data);
                         //state.ClearBuffer();
                         handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                         new AsyncCallback(ReadCallback), state);
@@ -272,17 +275,8 @@ namespace SanwaMarco
                 #region 執行工作
                 Thread.Sleep(50);
                 returnMsg = "$" + address;
-                Boolean doResult = true;
-
                 switch (func_name)
                 {
-                    //case "INIT":
-                    //    Marco.Init(rcvArgs[0]);
-                    //    break;
-
-                    case "INIT_ALL":
-                        Marco.RunMarco(func_name, argMap);
-                        break;
                     #region Robot 指令
                     case "ROBOT_CARRY":
                         argMap.Add("@src", rcvArgs[0]);//src : P101, SHELF1, ... 等等; 讓Marco 自行處理可辨識的名稱
@@ -294,11 +288,6 @@ namespace SanwaMarco
                         Marco.RunMarco(func_name, argMap);
                         break;
                     #endregion
-                    case "MARCO_TEST":
-                        argMap.Add("@id", rcvArgs[0]);//測試用參數1
-                        argMap.Add("@name", rcvArgs[1]);//測試用參數2
-                        Marco.RunMarco(func_name, argMap);
-                        break;
                     default://不須特別做參數處理的 function, 傳入之參數會依序放在 @arg1...@argn
                         for (int i = 0; i < rcvArgs.Length; i++)
                         {
@@ -308,14 +297,11 @@ namespace SanwaMarco
                         break;
                 }
                 #endregion
-
             }
             catch (Exception e)
             {
                 logger.Error(e.Message + " " + e.StackTrace);
             }
-
-            
         }
 
         private void checkCmd(string msg, ref string factor, ref string[] args)
@@ -333,7 +319,10 @@ namespace SanwaMarco
                 //測試用
                 //cmdTest(handler, msg);
                 Thread.Sleep(50);
-                cmdProcess(handler, msg);
+                if(msg.Contains("1315"))
+                    cmdProcess(handler, msg);
+                else
+                    cmdProcess(handler, msg);
             }
         }
 
@@ -368,12 +357,16 @@ namespace SanwaMarco
                 //INF
                 //returnMsg = msg.Replace("MCR", "INF").Replace("GET", "INF").Replace("SET", "INF").Replace(";", "");
                 returnMsg = "$" + job.localVarMap["address"] + "INF:" + job.localVarMap["orgMsg"];
+                if (!job.jobData.Equals(""))
+                {
+                    returnMsg = returnMsg + "/" + job.jobData;
+                }
             }
             else
             {
                 //ABS
                 //returnMsg = job.localVarMap["msg"].Replace("MCR", "ABS").Replace("GET", "ABS").Replace(";", "") + "|ERROR/" + job.result  + "/Place";
-                returnMsg = job.localVarMap["msg"].Replace("MCR", "ABS").Replace("GET", "ABS").Replace(";", "") + "|ERROR/" + job.jobResult ;
+                returnMsg = job.localVarMap["msg"].Replace("MCR:", "ABS:").Replace("GET:", "ABS:").Replace(";", "") + "|ERROR/" + job.jobResult ;
             }
             Send(replayer, returnMsg + ";\r");//send INF or ABS
             #endregion

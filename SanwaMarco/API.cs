@@ -12,7 +12,7 @@ namespace SanwaMarco
         private static readonly ILog logger = LogManager.GetLogger(typeof(API));
         public Dictionary<string, string> varMap;
         private string method_name;
-        private Boolean failReturn;
+        private Boolean autoReturn;
         private string errCode;
 
         public API()
@@ -20,10 +20,10 @@ namespace SanwaMarco
 
         }
 
-        public API(string method_name, Boolean failReturn, string errCode, Dictionary<string, string> varMap)
+        public API(string method_name, Boolean autoReturn, string errCode, Dictionary<string, string> varMap)
         {
             this.method_name = method_name;
-            this.failReturn = failReturn;
+            this.autoReturn = autoReturn;
             this.errCode = errCode;
             this.varMap = varMap;
         }
@@ -48,11 +48,23 @@ namespace SanwaMarco
                 case "I7565DNM_GETIOS":
                     result = I7565DNM_GETIOS(ref returnValue);
                     break;
+                case "I7565DNM_READIO":
+                    result = I7565DNM_READIO(ref returnValue);
+                    break;
+                case "I7565DNM_READIOS":
+                    result = I7565DNM_READIOS(ref returnValue);
+                    break;
                 case "I7565DNM_CHECK_IOS":
                     result = I7565DNM_CHECK_IOS(ref returnValue);
                     break;
                 case "I7565DNM_SETIO":
                     result = I7565DNM_SETIO();
+                    break;
+                case "I7565DNM_SETIOS":
+                    result = I7565DNM_SETIOS();
+                    break;
+                case "I7565DNM_REFRESH":
+                    result = I7565DNM_REFRESH();
                     break;
                 default:
                     result = method_name + " not support";
@@ -173,6 +185,85 @@ namespace SanwaMarco
         #endregion
 
         #region 泓格 device net API
+        /// <summary>
+        /// 更新Input 資料
+        /// </summary>
+        /// <returns></returns>
+        private string I7565DNM_REFRESH()
+        {
+            string result = "I7565DNM_REFRESH ERROR";
+            string device = "";
+            I7565DNM deviceCtrl = null;
+            try
+            {
+                varMap.TryGetValue("@device", out device);
+                if (device == null)
+                {
+                    result = "device not define";
+                    return result;
+                }
+                Marco.deviceMap.TryGetValue(device, out object obj);
+                if (obj == null)
+                {
+                    result = "Device:" + device + " not exist.";
+                    return result;
+                }
+                deviceCtrl = (I7565DNM)obj;
+                deviceCtrl.I7565DNM_REFRESH();
+                result = deviceCtrl.errorCode;
+                return result;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.StackTrace);
+                return result;
+            }
+        }
+        private string I7565DNM_SETIOS()
+        {
+            string result = "I7565DNM_SETIOS ERROR";
+            string device = "";
+            string values = "";
+            string ios = "";
+            I7565DNM deviceCtrl = null;
+            try
+            {
+                if (!checkI7565DNM(ref result, ref device, ref ios, ref deviceCtrl))
+                {
+                    return result;
+                }
+                varMap.TryGetValue("@value", out values);
+                if (values == null || values.Equals("undefined"))
+                {
+                    result = "value not define";
+                    return result;
+                }
+                string[] valueAry = values.Split(';');
+                if (valueAry.Length!= 1 & (valueAry.Length != ios.Split(';').Length))
+                {
+                    result = "value item count error";
+                    return result;
+                }
+                int idx = 0;
+                foreach (string io in ios.Split(';'))
+                {
+                    uint value = valueAry.Length == 1 ? Convert.ToUInt32(valueAry[0]) : Convert.ToUInt32(valueAry[idx]);
+                    deviceCtrl.I7565DNM_SETIO(io, value);
+                    result = deviceCtrl.errorCode;
+                    if (!result.Equals(""))
+                    {
+                        return result;
+                    }
+                    idx++;
+                }
+                return result;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.StackTrace);
+                return result;
+            }
+        }
         private string I7565DNM_SETIO()
         {
             string result = "I7565DNM_SETIO ERROR";
@@ -187,7 +278,7 @@ namespace SanwaMarco
                     return result;
                 }
                 varMap.TryGetValue("@value", out value);
-                if (value == null)
+                if (value == null || value.Equals("undefined"))
                 {
                     result = "value not define";
                     return result;
@@ -215,7 +306,28 @@ namespace SanwaMarco
             string[] ioAry = ios.Split(';');
             foreach(string io in ioAry)
             {
-                uint s = deviceCtrl.I7565DNM_GETIO(io);
+                uint s = deviceCtrl.I7565DNM_GETIO(io, true);
+                values = values + s.ToString();
+                result = deviceCtrl.errorCode;
+                if (!result.Equals(""))
+                    return result;
+            }
+            return result;
+        }
+        private string I7565DNM_READIOS(ref string values)
+        {
+            string result = "I7565DNM_READIOS ERROR";
+            string device = "";
+            string ios = "";
+            I7565DNM deviceCtrl = null;
+            if (!checkI7565DNM(ref result, ref device, ref ios, ref deviceCtrl))
+            {
+                return result;
+            }
+            string[] ioAry = ios.Split(';');
+            foreach (string io in ioAry)
+            {
+                uint s = deviceCtrl.I7565DNM_READIO(io);
                 values = values + s.ToString();
                 result = deviceCtrl.errorCode;
                 if (!result.Equals(""))
@@ -286,7 +398,7 @@ namespace SanwaMarco
                 {
                     return result;
                 }
-                uint s = deviceCtrl.I7565DNM_GETIO(io);
+                uint s = deviceCtrl.I7565DNM_GETIO(io, true);
                 value = s.ToString();
                 result = deviceCtrl.errorCode;
                 return result;
@@ -297,18 +409,42 @@ namespace SanwaMarco
                 return result;
             }
         }
+        private string I7565DNM_READIO(ref string value)
+        {
+            string result = "I7565DNM_READIO ERROR";
+            string device = "";
+            string io = "";
+            I7565DNM deviceCtrl = null;
+            try
+            {
+                if (!checkI7565DNM(ref result, ref device, ref io, ref deviceCtrl))
+                {
+                    return result;
+                }
+                uint s = deviceCtrl.I7565DNM_READIO(io);
+                value = s.ToString();
+                result = deviceCtrl.errorCode;
+                return result;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.StackTrace);
+                return result;
+            }
+        }
+        
         private bool checkI7565DNM(ref string result, ref string device, ref string io, ref I7565DNM deviceCtrl)
         {
             try
             {
                 varMap.TryGetValue("@device", out device);
-                if (device == null)
+                if (device == null || device.Equals("undefined"))
                 {
                     result = "device not define";
                     return false;
                 }
                 varMap.TryGetValue("@io", out io);
-                if (io == null)
+                if (io == null || io.Equals("undefined"))
                 {
                     result = "io not define";
                     return false;

@@ -6,7 +6,7 @@ Function RobotReset() AS String;
     API("ATEL_ROBOT_SET_CMD", True);
 	SETVAR("@cmd", "$1SET:MODE_:0");
     API("ATEL_ROBOT_SET_CMD", True);
-	SETVAR("@cmd", "$1SET:SP___:10");
+	SETVAR("@cmd", "$1SET:SP___:30");
     API("ATEL_ROBOT_SET_CMD", True);
 	SETVAR("@cmd", "$1CMD:RET__");
     API("ATEL_ROBOT_MOTION_CMD", True);	

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +10,12 @@ namespace SanwaMarco.Controller
 {
     public class DeviceNetCtrl
     {
+        private static readonly ILog logger = LogManager.GetLogger(typeof(DeviceNetCtrl));
         public String ModuleName;
         private string desMACID;//0~63
+        UInt16 IOLen = 0;
+        public Byte[] IODATA = new Byte[512];
+        public Byte[] ODATA = new Byte[512];
         public Byte getDesMACID()
         {
             return Byte.Parse(desMACID);
@@ -107,5 +112,54 @@ namespace SanwaMarco.Controller
         public string IO_14_NAME { get => iO_14_NAME; set => iO_14_NAME = value; }
         public string IO_15_NAME { get => iO_15_NAME; set => iO_15_NAME = value; }
         public string IO_16_NAME { get => iO_16_NAME; set => iO_16_NAME = value; }
+
+        internal uint Refresh(byte cPort)
+        {
+            byte DesMACID = getDesMACID();//get macid
+            uint Ret =  I7565DNM_DotNET.I7565DNM.I7565DNM_ReadInputData(cPort, DesMACID, ConType(), ref IOLen, IODATA);
+            Random crandom = new Random();
+
+            //IODATA[0] = (byte) crandom.Next(1, 255);//假資料 kuma
+            //IODATA[1] = (byte)(IODATA[0] < 200 ? IODATA[0] + 55 : IODATA[0] - 55);//假資料 kuma
+            //IODATA[0] = 255;//假資料 kuma
+            //IODATA[1] = 255;//假資料 kuma
+            //return 0;//假資料 kuma
+            return Ret;
+        }
+
+        internal uint SetIO(byte cPort, int io, uint value)
+        {
+            byte DesMACID = getDesMACID();//get macid
+            //i = i | BIT(x); //set bit   : 與 00000001 做 OR 運算
+            //i = i & ~BIT(x);//clear bit : 與 11111110 做 AND 運算
+            if (io > 8)
+            {
+                if(DeviceOutputLen == 1)
+                    ODATA[0] = (byte)(value == 0 ? ODATA[0] & ~BIT(io - 8) : ODATA[0] | BIT(io - 8));//0: clear , 1:set
+                else
+                    ODATA[1] = (byte)(value == 0 ? ODATA[1] & ~BIT(io - 8) : ODATA[1] | BIT(io - 8));//0: clear , 1:set
+            }
+            else
+            {
+                ODATA[0] = (byte)(value == 0 ? ODATA[0] & ~BIT(io) : ODATA[0] | BIT(io));//0: clear , 1:set
+            }
+            ////Step 3 置換ODATA
+            //if (DeviceOutputLen == 2)
+            //    ODATA = IODATA;//此模組都是OUTPUT
+            //else
+            //    ODATA[0] = IODATA[1];//只有1 byte , ODATA 需去掉 input 的部分
+            //Step4 將ODATA寫入模組
+            logger.Debug(ODATA[0] + " " + ODATA[1]);//kuma debug
+            uint Ret = I7565DNM_DotNET.I7565DNM.I7565DNM_WriteOutputData(cPort, DesMACID, ConType(), DeviceOutputLen, ODATA);
+            return 0;//kuma 假資料
+            return Ret;
+
+        }
+        //取得BIT位移, 供byte set or clear 運算使用
+        private int BIT(int x)
+        {
+            int idx = x - 1;
+            return 1 << idx;
+        }
     }
 }

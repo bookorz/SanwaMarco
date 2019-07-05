@@ -65,6 +65,7 @@ namespace SanwaMarco
         public const int LOG_LEVEL_DEBUG = 3;
         public int logMode = LOG_LEVEL_INFO;//LOG_LEVEL_DEBUG
         public string jobResult;
+        public string jobData;
         string lastLine = "";
         //MessageReport msgReport = new MessageReport();
 
@@ -307,7 +308,6 @@ namespace SanwaMarco
             //string exp = cmd.Replace("ELSEIF", "").Replace("IF", "").Replace("WHILE", "").Replace(");", "").Replace("(", "").Trim();
             string temp = Regex.Replace(rule, pattern, "", RegexOptions.IgnoreCase).Trim();
             temp = trimDoubleQuotes(temp);  
-            //string exp =  parseCond(temp);//kuma
             string exp = temp;//kuma
             string compute = new DataTable().Compute(exp, null).ToString();
             if (compute.ToLower().Equals("true"))
@@ -354,6 +354,16 @@ namespace SanwaMarco
             {
                 //debug("↑宣告function 結束\n");//debug
             }
+            else if (line.Trim().StartsWith("RETVAL("))
+            {
+                string _return = parseReturnVal(line.Trim());
+                if (_return != null)
+                {
+                    isFinish = true;//return 條件成立, 之後不做了
+                    info(_return);
+                    result = _return;
+                }
+            }
             else if (line.Trim().StartsWith("RETURN(")|| line.Trim().StartsWith("Return ("))
             {
                 string _return = parseReturn(line.Trim());
@@ -386,12 +396,12 @@ namespace SanwaMarco
             {
                 //result.Append(line + "\n");//debug 用
                 result = procAPI(line.Trim());
+                if (!result.Equals(""))
+                    isFinish = true;//return 條件成立, 之後不做了
             }
             else
             {
                 return line.Substring(0, line.IndexOf(";")) + " parse error";
-                //result.Append(line + "\n");//debug 用
-                //result.Append("↑尚未處理\n");
             }
             return result;
         }
@@ -425,23 +435,6 @@ namespace SanwaMarco
                 logger.Error(msg);
             }
         }
-        //private string parseCond(string exp)
-        //{
-        //    //string pattern = "(?<!{)(@|\\$){1}\\w+";
-        //    string pattern = "(?<!{)@\\w+|(?<!{)\\$\\w+";
-        //    Match match = Regex.Match(exp, pattern);
-        //    if (match.Success)
-        //    {
-        //        foreach(Group g in match.Groups)
-        //        {
-        //            string key = g.ToString();
-        //            string value = getVar(key);
-        //            if (value!= null && !value.Equals(""))
-        //                exp = Regex.Replace(exp, "(?<!{)" + key.Replace("$","\\$"), value);
-        //        }
-        //    }
-        //    return exp;
-        //}
         private string parseLine(string line)
         {
             Regex rx = new Regex("@<\\s*\\w*\\s*>|\\$<\\s*\\w*\\s*>", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -566,20 +559,20 @@ namespace SanwaMarco
         {
             string[] tokens = decodeExp.Replace("DECODE", "").Split(new char[] { '(', ',', ')' }, StringSplitOptions.RemoveEmptyEntries);
             //string switchItem = getVar(tokens[0].Replace("\"",""));//kuma
-            string switchItem = tokens[0].Replace("\"", "");
+            string switchItem = tokens[0].Trim().Replace("\"", "");
 
             string val = null;//預設值
             string defVal = "undefined";//預設值
             if (tokens.Length % 2 == 0)
             {
-                defVal = tokens[tokens.Length - 1].Replace("\"", "");
+                defVal = tokens[tokens.Length - 1].Trim().Replace("\"", "");
             }
             for(int i=1; i< tokens.Length; i = i+2)
             {
-                string caseItem = tokens[i].Replace("\"","");
+                string caseItem = tokens[i].Trim().Replace("\"","");
                 if (switchItem.Equals(caseItem))
                 {
-                    val = tokens[i+1].Replace("\"", "");
+                    val = tokens[i+1].Trim().Replace("\"", "");
                     break;
                 }
             }
@@ -607,7 +600,6 @@ namespace SanwaMarco
                 {
                     string key = coll[i].Value.Trim().Replace("\"", "");
                     string value = coll[i + 1].Value.Trim().Replace("\"", "");
-                    //value = parseCond(value);//kuma
                     setVar(key, value);
                     debug("Call [SETVARS]:" + " Arg1:" + key + ", Arg2:" + value + "\n");//debug
                 }
@@ -652,30 +644,34 @@ namespace SanwaMarco
         
         private string procAPI(string func)
         {
-            string arg1 = "";
-            Boolean arg2;
-            string arg3 = "";
+            string methodName = "";
+            Boolean autoReturn = true;// default 當發生異常或有回傳值時，會返回前台
+            string errorCode = "";
             string returnValue = "";
             String result = "";
             try
             {
                 func = func.Replace("API(", "").Replace(");", "");
                 string[] args = func.Split(',');
-                arg1 = args[0].Trim().Replace("\"", "");
-                arg2 = args[1].Trim().Replace("\"", "").Equals("true") ? true : false;
+                methodName = args[0].Trim().Replace("\"", "");
+                autoReturn = args[1].Trim().Replace("\"", "").ToLower().Equals("true") ? true : false;
                 // 未指令 return code 時, 會使用 API 的預設 return code, 存在 method_result
-                arg3 = args.Length >= 3 ? args[2].Trim().Replace("\"", "") : "@" + arg1 + "_RESULT";
-                API api = new API(arg1, arg2, arg3, localVarMap);//建構API
+                errorCode = args.Length >= 3 ? args[2].Trim().Replace("\"", "") : "@" + methodName + "_RESULT";
+                API api = new API(methodName, autoReturn, errorCode, localVarMap);//建構API
                 result = api.Run(ref returnValue); //呼叫API
             }
             catch (Exception e)
             {
                 logger.Error("procAPI:" + func + " error." + e.StackTrace);
             }
-            if(!arg3.Equals(""))
-                localVarMap[arg3] = jobResult;//set result
-            if (!arg1.Equals(""))
-                localVarMap["@" + arg1 + "_RETURN"] = returnValue;//set return value
+            if(!errorCode.Equals(""))
+                localVarMap[errorCode] = jobResult;//set result
+            if (!methodName.Equals(""))
+            {
+                this.jobData = autoReturn ? returnValue : "";// 當autoReturn 為 false 發生異常或有回傳值時，不會返回前台
+                localVarMap["@" + methodName + "_RETURN"] = returnValue;//set return value
+            }
+            result = autoReturn ? result : "";// 當autoReturn 為 false 發生異常或有回傳值時，不會返回前台
             return result;
         }
         private Boolean procDelay(string func)
@@ -750,7 +746,23 @@ namespace SanwaMarco
         }
 
         
+        private string parseReturnVal(string func)
+        {
+            StringBuilder result = new StringBuilder();
+            func = func.Replace("RETVAL(", "").Replace(");", "").Trim();
+            string data = "";
+            RegexOptions options = ((RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline) | RegexOptions.IgnoreCase);
 
+            Regex reg = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)", options);
+            //Regex reg = new Regex("(?:^|,)(\\\"(?:[^\\\"]+|\\\"\\\")*\\\"|[^,]*)", options);
+            MatchCollection coll = reg.Matches(func);
+            string[] items = new string[coll.Count];
+            //arg1 = getVar(coll[0].Value);//kuma
+            data = coll[0].Value;
+            data = trimDoubleQuotes(data);
+            this.jobData = data;
+            return "";
+        }
         private string parseReturn(string func)
         {
             StringBuilder result = new StringBuilder();
@@ -782,10 +794,10 @@ namespace SanwaMarco
                 return null;//條件式不成立, 不須結束程式
         }
 
-        private string RETURN(string msg, string exp)
-        {
-            return "Call [RETURN]:" + "\nArg1:" + msg + "\nArg2:" + exp + "\n";//debug
-        }
+        //private string RETURN(string msg, string exp)
+        //{
+        //    return "Call [RETURN]:" + "\nArg1:" + msg + "\nArg2:" + exp + "\n";//debug
+        //}
 
         private string processCode(string line)
         {
