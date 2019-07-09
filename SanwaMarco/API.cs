@@ -63,6 +63,9 @@ namespace SanwaMarco
                 case "I7565DNM_SETIOS":
                     result = I7565DNM_SETIOS();
                     break;
+                case "I7565DNM_CHECK_SLAVE":
+                    result = I7565DNM_CHECK_SLAVE();
+                    break;
                 case "I7565DNM_REFRESH":
                     result = I7565DNM_REFRESH();
                     break;
@@ -71,6 +74,38 @@ namespace SanwaMarco
                     break;
             }
             return result;
+        }
+
+        private string I7565DNM_CHECK_SLAVE()
+        {
+            string result = "I7565DNM_CHECK_SLAVE ERROR";
+            string device = "";
+            I7565DNM deviceCtrl = null;
+            try
+            {
+                varMap.TryGetValue("@device", out device);
+                if (device == null)
+                {
+                    result = "device not define";
+                    return result;
+                }
+                Marco.deviceMap.TryGetValue(device, out object obj);
+                if (obj == null)
+                {
+                    result = "Device:" + device + " not exist.";
+                    return result;
+                }
+                deviceCtrl = (I7565DNM)obj;
+                deviceCtrl.I7565DNM_CHECK_SLAVE();
+                result = deviceCtrl.errorCode;
+                return result;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.StackTrace);
+                return result;
+            }
+            
         }
 
         #region ATEL Robot 控制
@@ -370,6 +405,7 @@ namespace SanwaMarco
             }
             for (int i=0; i< retry_count; i++)
             {
+                //logger.Info("Total retry_count:" + retry_count + " current count:" + i + " interval:" + interval);
                 a_values = "";//每次執行前清空一次
                 result = I7565DNM_GETIOS(ref a_values);
                 if (!result.Equals(""))

@@ -97,6 +97,15 @@
     <Content Include="Lib\log4net.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
     <Content Include="Lib\NPOI.dll" />
+    <Content Include="marco\CHECK_DNM_SLAVE.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco\ELPT_ORG.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco\ELPT_SERVO.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="marco\ELPT_MOVEIN.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

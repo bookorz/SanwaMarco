@@ -27,7 +27,7 @@ namespace SanwaMarco
     {
         public Dictionary<string, string> localVarMap = new Dictionary<string, string>();
         public string marcoName;
-        private static readonly ILog logger = LogManager.GetLogger(typeof(ComPortClient));
+        private static readonly ILog logger = LogManager.GetLogger(typeof(JobUtil));
 
         public JobUtil(string marcoName, Dictionary<string, string> localVarMap)
         {
@@ -143,7 +143,7 @@ namespace SanwaMarco
                     if (isFinish)
                         break;//命令中斷旗標已打開, 跳出 marco 處理
                     string cmd = (String)comands[i];
-                    logger.Debug("parseMarco:" + cmd);
+                    //logger.Debug("parseMarco:" + cmd);
                     lastLine = cmd;//紀錄目前處理的 line
                     cmd = parseLine(cmd);//kuma
 
@@ -394,6 +394,7 @@ namespace SanwaMarco
             }
             else if (line.Trim().StartsWith("API("))
             {
+                logger.Debug("MarcoName:" + marcoName + " parseMarco:" + line.Trim());
                 //result.Append(line + "\n");//debug 用
                 result = procAPI(line.Trim());
                 if (!result.Equals(""))

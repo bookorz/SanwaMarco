@@ -85,6 +85,31 @@ namespace SanwaMarco
             result = I7565DNM_DotNET.I7565DNM.I7565DNM_AddIOConnection(ActiveBoardNo, DesMACID, Contype, dnm.DeviceInputLen, dnm.DeviceOutputLen, dnm.EPR);
             return result;
         }
+
+        public uint I7565DNM_CHECK_SLAVE()
+        {
+            clearError();
+            byte cPort = Byte.Parse(portNo);//covert port id to byte
+            if (deviceNetCtrlMap.Count == 0)
+            {
+                setError("DNM90000");
+                return 90000;
+            }
+            foreach (KeyValuePair<string, DeviceNetCtrl> foo in deviceNetCtrlMap)
+            {
+                if (!foo.Value.ModuleName.ToLower().Equals("none"))//None => 未使用
+                {
+                    UInt32 Ret = I7565DNM_MODULE_STATUS(foo.Value);
+                    if (Ret != 0)
+                    {
+                        setError(Ret.ToString());
+                        return Ret;
+                    }
+                }
+            }
+            return 0;
+        }
+
         //泓格 I7565DNM 啟動設備通訊
         public uint I7565DNM_START()
         {
@@ -146,7 +171,7 @@ namespace SanwaMarco
             catch (Exception e)
             {
                 logger.Error(e.StackTrace);
-                setError("90001");
+                setError("DNM90001");
                 return 90001;
             }
         }
@@ -187,7 +212,7 @@ namespace SanwaMarco
             catch (Exception e)
             {
                 logger.Error(e.StackTrace);
-                setError("90003");//讀取暫存 Input 值異常
+                setError("DNM90003");//讀取暫存 Input 值異常
                 return 90003;//讀取暫存 Input 值異常
             }
         }
@@ -251,7 +276,7 @@ namespace SanwaMarco
             catch (Exception e)
             {
                 logger.Error(e.StackTrace);
-                setError("90002");
+                setError("DNM90002");
                 return 90002;
             }
         }

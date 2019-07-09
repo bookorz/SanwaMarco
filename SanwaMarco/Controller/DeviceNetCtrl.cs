@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static I7565DNM_DotNET.I7565DNM;
 
@@ -150,8 +151,10 @@ namespace SanwaMarco.Controller
             //    ODATA[0] = IODATA[1];//只有1 byte , ODATA 需去掉 input 的部分
             //Step4 將ODATA寫入模組
             logger.Debug(ODATA[0] + " " + ODATA[1]);//kuma debug
+            //Thread.Sleep(300);//KUMA DELAY
             uint Ret = I7565DNM_DotNET.I7565DNM.I7565DNM_WriteOutputData(cPort, DesMACID, ConType(), DeviceOutputLen, ODATA);
-            return 0;//kuma 假資料
+            //return 0;//kuma 假資料
+            logger.Debug("SETID Result:" + Ret);//kuma debug
             return Ret;
 
         }
