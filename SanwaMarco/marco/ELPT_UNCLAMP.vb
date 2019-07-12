@@ -9,5 +9,5 @@
 	SETVAR("@interval", "200");
 	SETVAR("@retry_count", "150");
     SETVAR("@values", "0101");
-    API("I7565DNM_CHECK_IOS", False);
+    API("I7565DNM_CHECK_IOS", True);
 End Function;

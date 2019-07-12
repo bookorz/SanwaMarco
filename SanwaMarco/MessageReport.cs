@@ -1,4 +1,5 @@
-﻿using SanwaMarco.Comm;
+﻿using log4net;
+using SanwaMarco.Comm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +11,16 @@ namespace SanwaMarco
     public class MessageReport : IConnectionReport
     {
 
+        private static readonly ILog logger = LogManager.GetLogger(typeof(MessageReport));
         public DeviceConfig _Config;
         void IConnectionReport.On_Connection_Connected(object Msg)
         {
-            Console.WriteLine("連線成功阿~~~~~~");
+            logger.Info(_Config.DeviceName + " 連線成功.");
         }
 
         void IConnectionReport.On_Connection_Connecting(string Msg)
         {
-            Console.WriteLine("連線中阿~~~~~~");
+            logger.Info(_Config.DeviceName + " 連線中.");
         }
 
         void IConnectionReport.On_Connection_Disconnected(string Msg)
@@ -28,7 +30,7 @@ namespace SanwaMarco
 
         void IConnectionReport.On_Connection_Error(string Msg)
         {
-            Console.WriteLine("連線失敗阿~~~~~~");
+            logger.Info(_Config.DeviceName + " 連線失敗.");
         }
 
         void IConnectionReport.On_Connection_Message(object Msg)

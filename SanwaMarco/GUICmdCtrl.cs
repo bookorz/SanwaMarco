@@ -140,7 +140,7 @@ namespace SanwaMarco
 
                     // Check for end-of-file tag. If it is not there, read   
                     // more data.  
-                    content = S + state.sb.ToString();//kuma add +
+                    content = S + state.sb.ToString();//資料不完全時，先存在S，之後在與接續的指令合併
                     if (content.IndexOf("\r") > -1 || content.IndexOf(Convert.ToChar(3)) != -1)
                     {
                         // All the data has been read from the   

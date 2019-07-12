@@ -118,8 +118,7 @@ namespace SanwaMarco.Controller
         {
             byte DesMACID = getDesMACID();//get macid
             uint Ret =  I7565DNM_DotNET.I7565DNM.I7565DNM_ReadInputData(cPort, DesMACID, ConType(), ref IOLen, IODATA);
-            Random crandom = new Random();
-
+            //Random crandom = new Random();//假資料 kuma
             //IODATA[0] = (byte) crandom.Next(1, 255);//假資料 kuma
             //IODATA[1] = (byte)(IODATA[0] < 200 ? IODATA[0] + 55 : IODATA[0] - 55);//假資料 kuma
             //IODATA[0] = 255;//假資料 kuma
@@ -144,12 +143,7 @@ namespace SanwaMarco.Controller
             {
                 ODATA[0] = (byte)(value == 0 ? ODATA[0] & ~BIT(io) : ODATA[0] | BIT(io));//0: clear , 1:set
             }
-            ////Step 3 置換ODATA
-            //if (DeviceOutputLen == 2)
-            //    ODATA = IODATA;//此模組都是OUTPUT
-            //else
-            //    ODATA[0] = IODATA[1];//只有1 byte , ODATA 需去掉 input 的部分
-            //Step4 將ODATA寫入模組
+            //將ODATA寫入模組
             logger.Debug(ODATA[0] + " " + ODATA[1]);//kuma debug
             //Thread.Sleep(300);//KUMA DELAY
             uint Ret = I7565DNM_DotNET.I7565DNM.I7565DNM_WriteOutputData(cPort, DesMACID, ConType(), DeviceOutputLen, ODATA);

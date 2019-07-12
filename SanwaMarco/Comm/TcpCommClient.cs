@@ -72,7 +72,7 @@ namespace SanwaMarco.Comm
 
         private void ConnectServer(object input)
         {
-            ConnReport.On_Connection_Connecting("Connecting");
+            ConnReport.On_Connection_Connecting("["+ Config.DeviceName + "] Connecting");
             //先建立IPAddress物件,IP為欲連線主機之IP
             
             IPAddress ipa = IPAddress.Parse(Config.IPAdress);
@@ -87,20 +87,20 @@ namespace SanwaMarco.Comm
                 tcpClient.Connect(ipe);
                 if (tcpClient.Connected)
                 {
-                    ConnReport.On_Connection_Connected("Connected");
+                    ConnReport.On_Connection_Connected("[" + Config.DeviceName + "] Connected");
                     ThreadPool.QueueUserWorkItem(new WaitCallback(Receive));
                 }
                 else
                 {
-                    ConnReport.On_Connection_Error("Error");
+                    ConnReport.On_Connection_Error(Config.DeviceName + "Error");
                 }
 
             }
             catch (Exception e)
             {
                 tcpClient.Close();
-                logger.Error("連線失敗" + e.StackTrace);
-                ConnReport.On_Connection_Error("(ConnectServer )" + e.Message + "\n" + e.StackTrace);                
+                logger.Error("[" + Config.DeviceName + "] 連線失敗" + e.StackTrace);
+                ConnReport.On_Connection_Error("[" + Config.DeviceName + "] " + e.Message + "\n" + e.StackTrace);                
             }
 
         }

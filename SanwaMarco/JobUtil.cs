@@ -64,8 +64,8 @@ namespace SanwaMarco
         public const int LOG_LEVEL_INFO = 2;
         public const int LOG_LEVEL_DEBUG = 3;
         public int logMode = LOG_LEVEL_INFO;//LOG_LEVEL_DEBUG
-        public string jobResult;
-        public string jobData;
+        public string jobResult = "";
+        public string jobData = "";
         string lastLine = "";
         //MessageReport msgReport = new MessageReport();
 
@@ -143,9 +143,8 @@ namespace SanwaMarco
                     if (isFinish)
                         break;//命令中斷旗標已打開, 跳出 marco 處理
                     string cmd = (String)comands[i];
-                    //logger.Debug("parseMarco:" + cmd);
                     lastLine = cmd;//紀錄目前處理的 line
-                    cmd = parseLine(cmd);//kuma
+                    cmd = parseLine(cmd);
 
                     i++;
                     if (cmd.StartsWith("IF", StringComparison.InvariantCultureIgnoreCase))
@@ -305,10 +304,9 @@ namespace SanwaMarco
         {
             Boolean result = false;
             string pattern = @"(ELSE)?IF *\(|WHILE *\(|\) *$";// 取代 "ELSEIF  (" , "IF  (" , "WHILE  ("  , 以及最後一個 ")"
-            //string exp = cmd.Replace("ELSEIF", "").Replace("IF", "").Replace("WHILE", "").Replace(");", "").Replace("(", "").Trim();
             string temp = Regex.Replace(rule, pattern, "", RegexOptions.IgnoreCase).Trim();
             temp = trimDoubleQuotes(temp);  
-            string exp = temp;//kuma
+            string exp = temp;
             string compute = new DataTable().Compute(exp, null).ToString();
             if (compute.ToLower().Equals("true"))
                 result = true;
@@ -511,9 +509,7 @@ namespace SanwaMarco
         {
 
             string val = "";
-            //string[] tokens = exp.Replace("CONCAT", "").Split(new char[] { '(', ',', ')' }, StringSplitOptions.RemoveEmptyEntries);
             Regex rx = new Regex("(?:^|,)(\\\"(?:[^\\\"]+|\\\"\\\")*\\\"|[^,]*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            //string switchItem1 = getVar(tokens[0].Replace("\"", ""));
             MatchCollection matches = rx.Matches(Regex.Replace(exp, "^CONCAT\\(|\\)$",""));
             foreach (Match match in matches)
             {
@@ -523,23 +519,14 @@ namespace SanwaMarco
                 else
                     temp = match.Groups[2].Value;
                 temp = trimDoubleQuotes(temp);
-                //val = val + getVar(temp);
-                val = val + temp;//kuma
+                val = val + temp;
             }
-
-            //for (int i = 0; i < tokens.Length; i++)
-            //{
-            //    tokens[i] = Regex.Replace(tokens[i], @"^""|""$", "").Trim();// 去掉頭尾的 "
-            //    val = val + getVar(tokens[i]);
-            //}
-            //return val;
             return "\"" + val + "\"";
         }
 
         private string getAdd(string decodeExp)
         {
             string[] tokens = decodeExp.Replace("ADD", "").Split(new char[] { '(', ',', ')' }, StringSplitOptions.RemoveEmptyEntries);
-            //string switchItem = getVar(tokens[0].Replace("\"", ""));//kuma
             string switchItem = tokens[0].Replace("\"", "");
 
             int val = 0;
@@ -547,7 +534,6 @@ namespace SanwaMarco
             {
                 int tmp;
                 tokens[i] = trimDoubleQuotes(tokens[i]);
-                //if (int.TryParse(getVar(tokens[i]), out tmp))//kuma
                 if (int.TryParse(tokens[i], out tmp))
                         val = val + tmp;
                 else
@@ -559,7 +545,6 @@ namespace SanwaMarco
         private string getDecode(string decodeExp)
         {
             string[] tokens = decodeExp.Replace("DECODE", "").Split(new char[] { '(', ',', ')' }, StringSplitOptions.RemoveEmptyEntries);
-            //string switchItem = getVar(tokens[0].Replace("\"",""));//kuma
             string switchItem = tokens[0].Trim().Replace("\"", "");
 
             string val = null;//預設值
@@ -702,19 +687,11 @@ namespace SanwaMarco
         {
             return Regex.Replace(text, @"^ *""?|""? *$", "");// 去掉頭尾的 " 與空白
         }
-        //private string parsePrint(string exp)
-        //{
-        //    StringBuilder result = new StringBuilder();
-        //    //kuma 之後要改成送資料到HOST
-        //    result.Append("********** Print ********** " + getVar(exp.Replace("PRINT(", "").Replace(");", "")) + "\n");
-        //    return result.ToString();
-        //}
         private Boolean procPrint(string exp)
         {
             Boolean result = false;
             try
             {
-                //string msg = "********** Print ********** " + getVar(exp.Replace("PRINT(", "").Replace(");", "")) + "\n";//kuma
                 exp = exp.Replace("PRINT(", "").Replace(");", "");
                 exp = trimDoubleQuotes(exp);
                 string msg = null;
@@ -723,18 +700,15 @@ namespace SanwaMarco
                     string[] msgs = exp.Split(new char[] { '+' }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (string foo in msgs)
                     {
-                        //result = (result != null? result:"") + getVar(foo);//kuma
                         string temp = trimDoubleQuotes(foo);
                         msg = (msg != null ? msg : "") + temp;
                     }
-                    //msg = msg + "\n";
                 }
                 else
                 {
-                    //msg = exp + "\n";
                     msg = exp;
                 }
-                info(msg);
+                //info(msg);
                 Marco.Print(msg);
                 result = true;
             }
@@ -755,10 +729,8 @@ namespace SanwaMarco
             RegexOptions options = ((RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline) | RegexOptions.IgnoreCase);
 
             Regex reg = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)", options);
-            //Regex reg = new Regex("(?:^|,)(\\\"(?:[^\\\"]+|\\\"\\\")*\\\"|[^,]*)", options);
             MatchCollection coll = reg.Matches(func);
             string[] items = new string[coll.Count];
-            //arg1 = getVar(coll[0].Value);//kuma
             data = coll[0].Value;
             data = trimDoubleQuotes(data);
             this.jobData = data;
@@ -773,17 +745,14 @@ namespace SanwaMarco
             RegexOptions options = ((RegexOptions.IgnorePatternWhitespace | RegexOptions.Multiline) | RegexOptions.IgnoreCase);
             
             Regex reg = new Regex("(?<=^|,)(\"(?:[^\"]|\"\")*\"|[^,]*)", options);
-            //Regex reg = new Regex("(?:^|,)(\\\"(?:[^\\\"]+|\\\"\\\")*\\\"|[^,]*)", options);
             MatchCollection coll = reg.Matches(func);
             string[] items = new string[coll.Count];
-            //arg1 = getVar(coll[0].Value);//kuma
             arg1 = coll[0].Value;
             arg1 = trimDoubleQuotes(arg1);
             if (coll.Count >= 2)
             {
                 arg2 = coll[1].Value;
                 arg2 = Regex.Replace(arg2, @"^,""|""$", "").Trim(); ;
-                //Regex.Replace(temp, @"^""|""$", "").Trim();// 去掉頭尾的 "
             }
             else
             {
@@ -794,12 +763,7 @@ namespace SanwaMarco
             else
                 return null;//條件式不成立, 不須結束程式
         }
-
-        //private string RETURN(string msg, string exp)
-        //{
-        //    return "Call [RETURN]:" + "\nArg1:" + msg + "\nArg2:" + exp + "\n";//debug
-        //}
-
+        
         private string processCode(string line)
         {
             StringBuilder result = new StringBuilder();
