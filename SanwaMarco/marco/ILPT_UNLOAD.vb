@@ -7,7 +7,7 @@
 	SETVARS("@interval", "200", "@retry_count", "10", "@values", "1111111");
     API("I7565DNM_CHECK_IOS", True);
     'Return ("Port sensors error", "@<I7565DNM_CHECK_IOS_RETURN> = 1111110");
-    'Door Right
+    'ILPT_RIGHT
     SETVAR("@io", DECODE("@<arg1>", "P3", "1107", "P4", "1207"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);
@@ -20,7 +20,7 @@
     SETVAR("@io", DECODE("@<arg1>", "P3", "1107", "P4", "1207"));
     SETVAR("@value", "0");
     API("I7565DNM_SETIOS", True);
-    'Door Close 2(密封)
+    'ILPT_CLOSE(密封)
     SETVAR("@io", DECODE("@<arg1>", "P3", "1110", "P4", "1210"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);
@@ -33,7 +33,7 @@
     SETVAR("@io", DECODE("@<arg1>", "P3", "1110", "P4", "1210"));
     SETVAR("@value", "0");
     API("I7565DNM_SETIOS", True);
-    'Door Close(前進)
+    'ILPT_FORWARD(前進)
     SETVAR("@io", DECODE("@<arg1>", "P3", "1105", "P4", "1205"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);
@@ -46,7 +46,7 @@
     SETVAR("@io", DECODE("@<arg1>", "P3", "1105", "P4", "1205"));
     SETVAR("@value", "0");
     API("I7565DNM_SETIOS", True);
-    'Latch Fix
+    'ILPT_LATCH_FIX
     SETVAR("@io", DECODE("@<arg1>", "P3", "1102", "P4", "1202"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);
@@ -59,7 +59,7 @@
     SETVAR("@io", DECODE("@<arg1>", "P3", "1102", "P4", "1202"));
     SETVAR("@value", "0");
     API("I7565DNM_SETIOS", True);
-    'Vacuum Off
+    'ILPT_VAC_OFF
     SETVAR("@io", DECODE("@<arg1>", "P3", "1402", "P4", "1410"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);
@@ -72,7 +72,7 @@
     SETVAR("@io", DECODE("@<arg1>", "P3", "1402", "P4", "1410"));
     SETVAR("@value", "0");
     API("I7565DNM_SETIOS", True);
-    'UnClamp
+    'ILPT_UNCLAMP
     SETVAR("@io", DECODE("@<arg1>", "P3", "1109", "P4", "1209"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);
@@ -85,7 +85,7 @@
     SETVAR("@io", DECODE("@<arg1>", "P3", "1109", "P4", "1209"));
     SETVAR("@value", "0");
     API("I7565DNM_SETIOS", True);
-    'UnDOCK
+    'ILPT_UNDOCK
     SETVAR("@io", DECODE("@<arg1>", "P3", "1101", "P4", "1201"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);

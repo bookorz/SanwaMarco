@@ -7,7 +7,7 @@
 	SETVARS("@interval", "200", "@retry_count", "10", "@values", "1111110");
     API("I7565DNM_CHECK_IOS", True);
     'Return ("Port sensors error", "@<I7565DNM_CHECK_IOS_RETURN> = 1111110");
-    'DOCK
+    'ILPT_DOCK
     SETVAR("@io", DECODE("@<arg1>", "P3", "1100", "P4", "1200"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);
@@ -21,7 +21,7 @@
     SETVAR("@value", "0");
     API("I7565DNM_SETIOS", True);
 
-    'Clamp
+    'ILPT_CLAMP
     SETVAR("@io", DECODE("@<arg1>", "P3", "1108", "P4", "1208"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);
@@ -35,7 +35,7 @@
     SETVAR("@value", "0");
     API("I7565DNM_SETIOS", True);
 
-    'Vacuum On
+    'ILPT_VAC_ON
     SETVAR("@io", DECODE("@<arg1>", "P3", "1403", "P4", "1411"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);
@@ -49,7 +49,7 @@
     SETVAR("@value", "0");
     API("I7565DNM_SETIOS", True);
 
-    'Latch Release
+    'ILPT_LATCH_RELEASE
     SETVAR("@io", DECODE("@<arg1>", "P3", "1103", "P4", "1203"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);
@@ -63,7 +63,7 @@
     SETVAR("@value", "0");
     API("I7565DNM_SETIOS", True);
 
-    'Door Open(後退)
+    'ILPT_BACKWARD(後退)
     SETVAR("@io", DECODE("@<arg1>", "P3", "1104", "P4", "1204"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);
@@ -77,7 +77,7 @@
     SETVAR("@value", "0");
     API("I7565DNM_SETIOS", True);
 
-    'Door Open 2(鬆開)
+    'ILPT_OPEN(鬆開)
     SETVAR("@io", DECODE("@<arg1>", "P3", "1111", "P4", "1211"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);
@@ -91,7 +91,7 @@
     SETVAR("@value", "0");
     API("I7565DNM_SETIOS", True);
 
-    'Door Left
+    'ILPT_LEFT
     SETVAR("@io", DECODE("@<arg1>", "P3", "1106", "P4", "1206"));
     SETVAR("@value", "1");
     API("I7565DNM_SETIOS", True);

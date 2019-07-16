@@ -100,6 +100,12 @@
     <Content Include="marco\CHECK_DNM_SLAVE.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="marco\ILPT_UNLOAD.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco\ILPT_LOAD.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="marco\ELPT_ORG.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -145,11 +151,9 @@
     <Content Include="marco\MARCO_TEST.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_CARRY.vb" />
     <Content Include="marco\ROBOT_GET.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_PRESENCE.vb" />
     <Content Include="marco\ROBOT_GETW.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
