@@ -1,4 +1,4 @@
-﻿Function ILPT_UNLOAD();
+﻿Function ILPT_RIGHT();
     SETVAR("@device", "DNM01");
     '檢查 Port 資料
 	Return ("Port Error:@<arg1>", "'@<arg1>' not in ('P3','P4')");
