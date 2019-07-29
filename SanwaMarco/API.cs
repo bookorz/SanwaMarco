@@ -185,6 +185,7 @@ namespace SanwaMarco
                 {
                     return result;
                 }
+                deviceCtrl.errorCode = "";
                 deviceCtrl.sendCommand(cmd);
                 result = deviceCtrl.errorCode;
                 return result;
@@ -207,6 +208,7 @@ namespace SanwaMarco
                 {
                     return result;
                 }
+                deviceCtrl.errorCode = "";
                 deviceCtrl.sendCommand(cmd);
                 result = deviceCtrl.errorCode;
                 return result;
@@ -419,7 +421,8 @@ namespace SanwaMarco
                 }
                 Thread.Sleep(interval);//Fail 時 Sleep by interval 後重試
             }
-            result = "I7565DNM_CHECK_IOS ERROR:" + a_values;//超過指定重試條件後，IO訊號依然未達期望值
+            varMap.TryGetValue("@io", out string io);
+            result = "I7565DNM_CHECK_IOS check "+ io + " ERROR:" + a_values + " not match " + values;//超過指定重試條件後，IO訊號依然未達期望值
             return result;
         }
         private string I7565DNM_GETIO(ref string value)

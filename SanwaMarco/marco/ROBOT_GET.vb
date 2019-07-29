@@ -9,7 +9,7 @@ Function RobotGet();
 	RETURN("point_unknow,@<arg1>","'@<point>' = 'undefined'");
 	
 	'檢查來源地在席 io Sensor
-	SETVAR("@io",DECODE("@<arg1>","P1",101;102;103;2004;2005,"P2",201;202;203;2104;2105,"P3",301;302;303,"P4",309;310;311,"@<io>"));
+	SETVAR("@io", DECODE("@<arg1>", "P1", 101;102;103;108;109;110;104;105;106;107, "P2", 201;202;203;111;112;113;204;205;206;207, "P3", 301;302;303;305, "P4", 309;310;311;313, "@<io>"));
 	SETVAR("@io", DECODE("@<arg1>", "BF11", 500;501, "BF12", 504;505, "BF13", 508;509, "BF14", 512;513, "BF15", 808;809, "@<io>"));
 	SETVAR("@io", DECODE("@<arg1>", "BF21", 502;503, "BF22", 506;507, "BF23", 510;511, "BF24", 514;515, "BF25", 810;811, "@<io>"));
 	SETVAR("@io", DECODE("@<arg1>", "BF31", 600;601, "BF32", 604;605, "BF33", 608;609, "BF34", 812;813, "@<io>"));
@@ -19,9 +19,9 @@ Function RobotGet();
 	SETVAR("@interval", "100");
 	SETVAR("@retry_count", "10");
 	IF("'@<arg1>' in ('P1','P2')")
-        SETVAR("@values", "00000");
+        SETVAR("@values", "0000010101");
 	ELSEIF("'@<arg1>' in ('P3','P4')")
-        SETVAR("@values", "000");
+        SETVAR("@values", "0001");
 	ELSE
         SETVAR("@values", "00");
 	ENDIF
@@ -39,9 +39,9 @@ Function RobotGet();
 	SETVAR("@interval", "100");
 	SETVAR("@retry_count", "10");
 	IF("'@<arg1>' in ('P1','P2')")
-        SETVAR("@values", "11100");
+        SETVAR("@values", "1110010101");
 	ELSEIF("'@<arg1>' in ('P3','P4')")
-        SETVAR("@values", "111");
+        SETVAR("@values", "1111");
 	ELSE
         SETVAR("@values", "11");
 	ENDIF

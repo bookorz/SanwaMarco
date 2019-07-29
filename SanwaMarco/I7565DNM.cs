@@ -162,7 +162,10 @@ namespace SanwaMarco
                 {
                     UInt32 Ret = dnm.Refresh(cPort);
                     if (Ret != 0)
+                    {
+                        errorCode = Ret.ToString();
                         return Ret;
+                    }
                 }
                 uint temp = io > 8 ? dnm.IODATA[1] : dnm.IODATA[0];
                 int bit = io > 8 ? io - 8 - 1 : io - 1;
@@ -251,10 +254,6 @@ namespace SanwaMarco
                     return 20001;
                 }
 
-                if (boardNo == 11 || boardNo == 12 || boardNo == 14 || ioNo.Equals("904") || ioNo.Equals("905") || ioNo.Equals("906") || ioNo.Equals("907"))
-                {
-                    return 0;//B部 和 shutter 暫時不控制 
-                }
                 DeviceNetCtrl dnm = deviceNetCtrlMap[boardNo.ToString()];//boardNo: 0~63
                 //舊抓法
                 //UInt16 IOLen = 0;

@@ -60,6 +60,7 @@ namespace SanwaMarco.Controller
 
         public bool sendCommand(string msg)
         {
+            errorCode = "";
             bool result = false;
             try
             {
