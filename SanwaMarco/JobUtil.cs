@@ -358,8 +358,8 @@ namespace SanwaMarco
                 if (_return != null)
                 {
                     isFinish = true;//return 條件成立, 之後不做了
-                    info(_return);
-                    result = _return;
+                    this.jobData = _return;
+                    result = "";//RETVAL 一率視為正常結束，所以給空白字串
                 }
             }
             else if (line.Trim().StartsWith("RETURN(")|| line.Trim().StartsWith("Return ("))
@@ -733,8 +733,8 @@ namespace SanwaMarco
             string[] items = new string[coll.Count];
             data = coll[0].Value;
             data = trimDoubleQuotes(data);
-            this.jobData = data;
-            return "";
+            //this.jobData = data;
+            return data;
         }
         private string parseReturn(string func)
         {
