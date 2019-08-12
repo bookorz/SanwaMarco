@@ -118,6 +118,13 @@ namespace SanwaMarco.Controller
         {
             byte DesMACID = getDesMACID();//get macid
             uint Ret =  I7565DNM_DotNET.I7565DNM.I7565DNM_ReadInputData(cPort, DesMACID, ConType(), ref IOLen, IODATA);
+            if (DeviceOutputLen == 2)
+            {
+                IODATA = ODATA;
+            }else if (DeviceOutputLen == 1)
+            {
+                IODATA[1] = ODATA[0];
+            }
             //Random crandom = new Random();//假資料 kuma
             //IODATA[0] = (byte) crandom.Next(1, 255);//假資料 kuma
             //IODATA[1] = (byte)(IODATA[0] < 200 ? IODATA[0] + 55 : IODATA[0] - 55);//假資料 kuma

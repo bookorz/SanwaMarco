@@ -301,6 +301,7 @@ namespace SanwaMarco
             try
             {
                 byte ActiveBoardNo = Byte.Parse(portNo);//covert port id to byte
+                ret = I7565DNM_CLOSE();
                 ret = I7565DNM_ACTIVE();
                 if ((ret == I7565DNM_DotNET.I7565DNM.DNMXS_NoError) || (ret == I7565DNM_DotNET.I7565DNM.I7565DNM_PortInUse))
                 //10026 找不到 COM PORT
