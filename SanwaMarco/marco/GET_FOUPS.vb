@@ -1,5 +1,5 @@
 ﻿Function GET_FOUPS();
-    SETVAR("@foups", "2");' Robot 在席因為沒有sensor先不處理
+    SETVAR("@foups", "3");' Robot 在席因為沒有sensor先不處理
     SETVAR("@device", "DNM01");
     API("I7565DNM_REFRESH", True);
     'A1在席確認 

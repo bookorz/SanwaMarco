@@ -10,8 +10,18 @@ namespace SanwaMarco
 {
     public static class Util
     {
+        static Dictionary<string, string> usbKeys = new Dictionary<string, string>();
+        /// <summary>
+        /// USB Keypro 序號與使用者清單
+        /// </summary>
+        public static void initKeyPro()
+        {
+            usbKeys.Add("KUBC8EDR","RD Software Team[1]");
+        }
+
         public static bool checkKeyPro(ref string msg)
         {
+            initKeyPro();
             Boolean result = false;
             int numDevices = 0, LocID = 0, ChipID = 0;
             string SerialBuffer = "".PadRight(50, ' ');
@@ -22,14 +32,26 @@ namespace SanwaMarco
                 FTChipID.ChipID.GetNumDevices(ref numDevices);
                 if (numDevices > 0)
                 {
+                    string owner;
                     for (int i = 0; i < numDevices; i++)
                     {
                         FTChipID.ChipID.GetDeviceSerialNumber(i, ref SerialBuffer, 50);
                         FTChipID.ChipID.GetDeviceDescription(i, ref Description, 50);
-                        if (!checkKeyProSerialNo(SerialBuffer, Description))
+                        //20190820 長官要求由加密改為寫死序號
+                        //if (!checkKeyProSerialNo(SerialBuffer, Description))
+                        //{
+                        //    msg = "USB Serial Number : " + SerialBuffer + "認證錯誤!(" + Description + ")";
+                        //    return false;
+                        //}
+                        if (!usbKeys.TryGetValue(SerialBuffer,out owner))
                         {
-                            msg = "USB Serial Number : " + SerialBuffer + "認證錯誤!(" + Description + ")";
+                            msg = "USB Serial Number : " + SerialBuffer + "未經過認證!! 請通知RD部門.";
                             return false;
+                        }
+                        else
+                        {
+                            msg = owner;
+                            return true;
                         }
                     }
                 }
