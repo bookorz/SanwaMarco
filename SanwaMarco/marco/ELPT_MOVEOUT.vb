@@ -20,7 +20,7 @@
     'CHECK SERVO
     SETVAR("@io", DECODE("@<arg1>", "P1", "2003", "P2", "2103", "@<io>"));
 	SETVAR("@interval", "200");
-	SETVAR("@retry_count", "5");
+	SETVAR("@retry_count", "1");
     SETVAR("@values", "1");
     API("I7565DNM_CHECK_IOS", False);
     Return ("PLEASE SERVO ON", "@<I7565DNM_CHECK_IOS_RETURN> = 0");
