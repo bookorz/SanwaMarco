@@ -17,6 +17,27 @@ namespace SanwaMarco
         public static void initKeyPro()
         {
             usbKeys.Add("KUBC8EDR","RD Software Team[1]");
+            usbKeys.Add("FT0NIDRK", "品保[1]");
+            usbKeys.Add("FT0NIB85", "品保[2]");
+            usbKeys.Add("FT0NI6XV", "檢證[1]");
+            usbKeys.Add("FT0NID8W", "檢證[2]");
+            usbKeys.Add("AJ03RTD5", "檢證[3]");
+            usbKeys.Add("FT0NI6YV", "檢證[4]");
+            usbKeys.Add("FT0NHP7C", "檢證[5]");
+            usbKeys.Add("FT0NIBA4", "客服[1]");
+            usbKeys.Add("FT0NI6YX", "客服[2]");
+            usbKeys.Add("AJ03SVEA", "客服[3]");
+            usbKeys.Add("FT0LPGKD", "客服[4]");
+            usbKeys.Add("FTWGXC1V", "客服[5]");
+            usbKeys.Add("FT0LPFQ6", "客服[6]");
+
+            usbKeys.Add("FT0LPG5H", "未分配 KEY[1]");
+            usbKeys.Add("FT0LPGJ5", "未分配 KEY[2]");
+            usbKeys.Add("FT0LPFU1", "未分配 KEY[3]");
+            usbKeys.Add("FT0LPGKO", "未分配 KEY[4]");
+            usbKeys.Add("FT0LPG4C", "未分配 KEY[5]");
+            usbKeys.Add("FT0LPGLQ", "未分配 KEY[6]");
+            usbKeys.Add("FT0LPGT8", "未分配 KEY[7]");
         }
 
         public static bool checkKeyPro(ref string msg)

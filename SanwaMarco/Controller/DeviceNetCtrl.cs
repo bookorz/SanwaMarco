@@ -151,10 +151,9 @@ namespace SanwaMarco.Controller
                 ODATA[0] = (byte)(value == 0 ? ODATA[0] & ~BIT(io) : ODATA[0] | BIT(io));//0: clear , 1:set
             }
             //將ODATA寫入模組
-            logger.Debug(ODATA[0] + " " + ODATA[1]);//kuma debug
-            //Thread.Sleep(300);//KUMA DELAY
+            //logger.Debug(ODATA[0] + " " + ODATA[1]);// debug
             uint Ret = I7565DNM_DotNET.I7565DNM.I7565DNM_WriteOutputData(cPort, DesMACID, ConType(), DeviceOutputLen, ODATA);
-            //return 0;//kuma 假資料
+            //return 0;//測試假資料
             logger.Debug("SETID Result:" + Ret);//kuma debug
             return Ret;
 

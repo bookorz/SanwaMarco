@@ -392,7 +392,7 @@ namespace SanwaMarco
             }
             else if (line.Trim().StartsWith("API("))
             {
-                logger.Debug("MarcoName:" + marcoName + " parseMarco:" + line.Trim());
+                //logger.Debug("MarcoName:" + marcoName + " parseMarco:" + line.Trim());
                 //result.Append(line + "\n");//debug 用
                 result = procAPI(line.Trim());
                 if (!result.Equals(""))

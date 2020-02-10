@@ -273,7 +273,7 @@ namespace SanwaMarco
                 #endregion
 
                 #region 執行工作
-                Thread.Sleep(50);
+                //Thread.Sleep(50);20191114 取消 SLEEP for IO REFRESH 效能
                 returnMsg = "$" + address;
                 switch (func_name)
                 {
@@ -316,13 +316,8 @@ namespace SanwaMarco
             string[] MsgAry = ((string)Msg).Split(new string[] { "\r" }, StringSplitOptions.RemoveEmptyEntries);
             foreach(string msg in MsgAry)
             {
-                //測試用
-                //cmdTest(handler, msg);
-                Thread.Sleep(50);
-                if(msg.Contains("1315"))
-                    cmdProcess(handler, msg);
-                else
-                    cmdProcess(handler, msg);
+                //Thread.Sleep(50);20191114 取消 SLEEP for IO REFRESH 效能
+                cmdProcess(handler, msg);
             }
         }
 
