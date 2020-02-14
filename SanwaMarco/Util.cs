@@ -57,21 +57,22 @@ namespace SanwaMarco
                     for (int i = 0; i < numDevices; i++)
                     {
                         FTChipID.ChipID.GetDeviceSerialNumber(i, ref SerialBuffer, 50);
+                        FTChipID.ChipID.GetDeviceChipID(i, ref ChipID);
                         FTChipID.ChipID.GetDeviceDescription(i, ref Description, 50);
                         //20190820 長官要求由加密改為寫死序號
-                        //if (!checkKeyProSerialNo(SerialBuffer, Description))
-                        //{
-                        //    msg = "USB Serial Number : " + SerialBuffer + "認證錯誤!(" + Description + ")";
-                        //    return false;
-                        //}
-                        if (!usbKeys.TryGetValue(SerialBuffer,out owner))
+                        if (!checkKeyProSerialNo(SerialBuffer, Description, "0x" + ChipID.ToString("X")))
                         {
-                            msg = "USB Serial Number : " + SerialBuffer + "未經過認證!! 請通知RD部門.";
+                            msg = "USB Serial Number : " + SerialBuffer + "認證錯誤!(" + Description + ")";
                             return false;
                         }
+                        //if (!usbKeys.TryGetValue(SerialBuffer,out owner))
+                        //{
+                        //    msg = "USB Serial Number : " + SerialBuffer + "未經過認證!! 請通知RD部門.";
+                        //    return false;
+                        //}
                         else
                         {
-                            msg = owner;
+                            msg = SerialBuffer.Trim();
                             return true;
                         }
                     }
@@ -91,9 +92,9 @@ namespace SanwaMarco
             return result;
         }
 
-        private static bool checkKeyProSerialNo(string serialBuffer, string description)
+        private static bool checkKeyProSerialNo(string serialBuffer, string description,string chipID)
         {
-            string md5 = getMD5("SANWA" + serialBuffer + "SANWA");
+            string md5 = getMD5("SANWA"+ chipID + serialBuffer);
             if(description.Equals(md5.Substring(0, 8) + md5.Substring(12, 8)))
             {
                 return true;
