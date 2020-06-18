@@ -126,8 +126,8 @@ namespace SanwaMarco
                 {
                     deviceCtrl.processState = DeviceController.PROCESS_STATE_PROCESS;
                     deviceCtrl.sendCommand(cmd);
-                    //等待60秒
-                    SpinWait.SpinUntil(() => (deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE) || (deviceCtrl.processState == DeviceController.PROCESS_STATE_ERROR), 60000);
+                    //等待600秒
+                    SpinWait.SpinUntil(() => (deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE) || (deviceCtrl.processState == DeviceController.PROCESS_STATE_ERROR), 600000);
                     result = deviceCtrl.errorCode;
                 }
                 else

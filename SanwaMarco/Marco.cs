@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -76,7 +77,22 @@ namespace SanwaMarco
                 }
                 else if (foo.Conn_Type.Equals("ComPort"))
                 {
-                    dc.PortName = foo.Conn_Address;
+                    if (foo.Conn_Address.Equals(""))
+                    {
+                        string[] ports = SerialPort.GetPortNames();
+                        if (ports.Count() == 0)
+                        {
+                            dc.PortName = "";
+                        }
+                        else
+                        {
+                            dc.PortName = ports[0];
+                        }
+                    }
+                    else
+                    {
+                        dc.PortName = foo.Conn_Address;
+                    }
                     dc.BaudRate = foo.Com_Baud_Rate;
                     dc.DataBits = foo.Com_Data_Bits;
                     dc.ParityBit = foo.Com_Parity_Bit;
@@ -87,7 +103,22 @@ namespace SanwaMarco
                 }
                 else if (foo.Conn_Type.Equals("ICPDeviceNet"))
                 {
-                    dc.PortName = foo.Conn_Address;
+                    if (foo.Conn_Address.Equals(""))
+                    {
+                        string[] ports = SerialPort.GetPortNames();
+                        if (ports.Count() == 0)
+                        {
+                            dc.PortName = "";
+                        }
+                        else
+                        {
+                            dc.PortName = ports[0];
+                        }
+                    }
+                    else
+                    {
+                        dc.PortName = foo.Conn_Address;
+                    }
                     dc.File = foo.File;
                     dvcCtrl = new I7565DNM(dc);
                     dvcCtrl.start();

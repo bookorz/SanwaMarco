@@ -38,7 +38,7 @@ Function RobotPut();
 	
 	'放完後檢查實際IO
 	SETVAR("@interval", "100");
-	SETVAR("@retry_count", "10");
+	SETVAR("@retry_count", "200");
 	IF("'@<arg1>' in ('P1','P2')")
 		SETVAR("@values", "0000010101");
 	ELSEIF("'@<arg1>' in ('P3','P4')") 

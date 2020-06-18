@@ -5,7 +5,7 @@
     'CHECK READY
     SETVAR("@io", DECODE("@<arg1>", "P1", "2002", "P2", "2102", "@<io>"));
 	SETVAR("@interval", "200");
-	SETVAR("@retry_count", "1");
+	SETVAR("@retry_count", "9");
     SETVAR("@values", "1");
     API("I7565DNM_CHECK_IOS", False);
     Return ("Port not Ready.", "@<I7565DNM_CHECK_IOS_RETURN> = 0");

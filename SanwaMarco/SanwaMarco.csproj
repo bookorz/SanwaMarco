@@ -195,6 +195,9 @@
     <Content Include="marco\ROBOT_RETRACT.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="marco\ROBOT_SPEED.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="marco\SET_RELIOS.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
