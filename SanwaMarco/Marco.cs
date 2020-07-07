@@ -15,9 +15,18 @@ namespace SanwaMarco
 {
     public static class Marco
     {
+        public enum RunMode
+        {
+            Normal = 0,
+            SrcScriptRun,
+        }
+
         public static Dictionary<string, string> pubVarMap = new Dictionary<string, string>();
         public static Dictionary<string, Object> deviceMap = new Dictionary<string, Object>();
         public static GUICmdCtrl _EventReport;
+
+        //20200707 Pingchung 設定Marco運轉模式
+        public static RunMode runMode;
 
         public static void RunMarco(String marcoName, Dictionary<string, string> args)
         {
@@ -43,6 +52,8 @@ namespace SanwaMarco
             DeviceConfiguration config = ConfigurationManager.OpenMappedMachineConfiguration(fileMap).GetSection("deviceSettingGroup/deviceConfig") as DeviceConfiguration;
             Console.WriteLine();
             deviceMap.Clear();
+
+            runMode = RunMode.Normal;
             foreach (DeviceSettingElement foo in config.DeviceSettings)
             {
                 IDevice dvcCtrl;

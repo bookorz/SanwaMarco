@@ -5,6 +5,7 @@
     'SETVAR("@value", "0;0;1;0");
     'SETVAR("@io", DECODE("@<arg1>", "P1", "2009;2011", "P2", "2109;2111", "@<io>"));
     'SETVAR("@value", "1;0"); 
+    'CHECK A AREA SENSOR
     'CHECK READY
     SETVAR("@io", DECODE("@<arg1>", "P1", "2002", "P2", "2102", "@<io>"));
 	SETVAR("@interval", "200");
@@ -12,6 +13,13 @@
     SETVAR("@values", "1");
     API("I7565DNM_CHECK_IOS", False);
     Return ("Port not Ready.", "@<I7565DNM_CHECK_IOS_RETURN> = 0");
+    'CHECK A AREA SENSOR
+    SETVAR("@io", "710");
+	SETVAR("@interval", "200");
+	SETVAR("@retry_count", "1");
+    SETVAR("@values", "1");
+    API("I7565DNM_CHECK_IOS", False);
+    Return ("A AREA SENSOR ON", "@<I7565DNM_CHECK_IOS_RETURN> = 0");
     'CHECK SHUTTER
     SETVAR("@io", DECODE("@<arg1>", "P1", "704", "P2", "706"));
 	SETVARS("@interval", "200", "@retry_count", "1", "@values", "1");
@@ -48,7 +56,13 @@
     '檢查做動後的 io Sensor
     SETVAR("@io", DECODE("@<arg1>", "P1", "108;109;110", "P2", "111;112;113", "@<io>"));
 	SETVAR("@interval", "200");
-	SETVAR("@retry_count", "100);
+	SETVAR("@retry_count", "100");
     SETVAR("@values", "100");
+    '新增緊急停止功能
+    SETVAR("@ems_input", "710");
+    SETVAR("@ems_values", "1");
+    '關閉 A1-SERVO(OFF) A2-SERVO(OFF) A1 Shutter開(OFF) A1 Shutter關(OFF) A2 Shutter開(OFF) A2 Shutter關(OFF)    
+    SETVAR("@ems_output", "2009;2109;904;905;906;907");
+    SETVAR("@ems_enabled", "0;0;0;0;0;0");
     API("I7565DNM_CHECK_IOS", True);
 End Function;

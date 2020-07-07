@@ -301,6 +301,7 @@ namespace SanwaMarco
                 return result;
             }
         }
+
         private string I7565DNM_SETIO()
         {
             string result = "I7565DNM_SETIO ERROR";
@@ -419,12 +420,113 @@ namespace SanwaMarco
                     result = "";
                     return result;//I7565DNM_CHECK_IOS 成功
                 }
+
+                //2020.07.06 加入ems 判斷 Pingchung Start ++
+                //檢查是否有外部訊號(EMS)需要立即停止動作
+                if (Marco.runMode != Marco.RunMode.SrcScriptRun)    //API直接取用Marco元件不是好事
+                {
+                    if (varMap.TryGetValue("@ems_input", out string s_ems_io) && varMap.TryGetValue("@ems_values", out string s_ems_values))
+                    {
+                        //讀取ems_input訊號點位
+                        //a_values為回傳值
+                        result = I7556DNM_CHECK_EMS(ref a_values);
+                        if (!result.Equals(""))
+                            return result;
+
+                        //比較回傳值與設定值是否相同
+                        if (!a_values.Equals(s_ems_values))
+                        {
+                            result = "emergency stop " + s_ems_io + " ERROR:" + s_ems_values + " not match " + a_values;
+
+                            //有設定ems_output的情況下，可停止對應的點位
+                            if (varMap.TryGetValue("@ems_output", out string s_ems_output) && varMap.TryGetValue("@ems_enabled", out string s_ems_enabled))
+                            {
+                                //注意
+                                //I7565DNM_CHECK_IOS讀取的TKey為@values
+                                //II7565DNM_SETIO讀取的TKey為@value
+
+                                varMap["@io"] = s_ems_output;
+                                varMap["@value"] = s_ems_enabled;
+
+                                if (!s_ems_output.Contains(";"))
+                                {
+                                    I7565DNM_SETIO();
+                                }
+                                else
+                                {
+                                    I7565DNM_SETIOS();
+                                }
+
+                            }
+                            return result;
+                        }
+                    }
+                }
+                //2020.07.06 加入ems 判斷 Pingchung End ++
+
                 Thread.Sleep(interval);//Fail 時 Sleep by interval 後重試
             }
             varMap.TryGetValue("@io", out string io);
             result = "I7565DNM_CHECK_IOS check "+ io + " ERROR:" + a_values + " not match " + values;//超過指定重試條件後，IO訊號依然未達期望值
             return result;
         }
+        private string I7556DNM_CHECK_EMS(ref string a_values)  //讀取EMS Bit 
+        { 
+            string result = "I7565DNM_CHECK_EMS ERROR";
+            string device = "";
+
+            //check iems_io
+            if (!varMap.TryGetValue("@ems_input", out string s_ems_io))
+            {
+                result = "ems_io not define";
+                return result;
+            }
+
+            //check ems_values
+            if (!varMap.TryGetValue("@ems_values", out string s_ems_values))
+            {
+                result = "ems_values not define";
+                return result;
+            }
+            
+
+            varMap.TryGetValue("@device", out device);
+            if (device == null || device.Equals("undefined"))
+            {
+                result = "device not define";
+                return result;
+            }
+
+            Marco.deviceMap.TryGetValue(device, out object obj);
+
+            I7565DNM deviceCtrl = (I7565DNM)obj;
+
+            //確認單點或這是多點
+            if (!s_ems_io.Contains(";"))
+            {
+                uint s = deviceCtrl.I7565DNM_GETIO(s_ems_io, true);
+                a_values = s.ToString();
+                result = deviceCtrl.errorCode;
+            }
+            else
+            {
+                string deviceErrorCode = "";
+                string[] ioAry = s_ems_io.Split(';');   //檢查點位(Address)
+                foreach (string ss in ioAry)
+                {
+                    uint s = deviceCtrl.I7565DNM_GETIO(ss, true);
+                    a_values = a_values + s.ToString();
+                    deviceErrorCode = deviceCtrl.errorCode;
+
+                    //硬體讀取值異常
+                    if (!deviceErrorCode.Equals("")) result = deviceErrorCode;
+                }
+            }
+
+            return result;
+        }
+
+
         private string I7565DNM_GETIO(ref string value)
         {
             string result = "I7565DNM_GETIO ERROR";
