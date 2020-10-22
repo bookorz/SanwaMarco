@@ -1,0 +1,11 @@
+﻿Function RobotSpeed() As String;
+    SETVAR("@device", "DNM01");
+    SETVAR("@io", "1901");
+    SETVAR("@value", "1");
+    API("I7565DNM_SETIO", True);	
+    Return ("SETIO_ERROR", "'@<I7565DNM_SETIO_RESULT>' <> '0'");
+    DELAY(1000);
+    SETVAR("@value", "0");
+    API("I7565DNM_SETIO", True);
+    Return ("SETIO_ERROR", "'@<I7565DNM_SETIO_RESULT>' <> '0'");
+End Function;

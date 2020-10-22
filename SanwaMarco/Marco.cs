@@ -21,12 +21,27 @@ namespace SanwaMarco
             SrcScriptRun,
         }
 
+        
+        public enum MachineType
+        {
+            Normal = 0,     //一般形式(18 Port)
+            _26Port,
+        }
+        
         public static Dictionary<string, string> pubVarMap = new Dictionary<string, string>();
         public static Dictionary<string, Object> deviceMap = new Dictionary<string, Object>();
         public static GUICmdCtrl _EventReport;
 
+        /// <summary>
+        /// 接收到$1EVT
+        /// </summary>
+        public static EventHandler<string> ReceivedEventMessage;
+
         //20200707 Pingchung 設定Marco運轉模式
         public static RunMode runMode;
+
+        //20200708 Pingchung 設定機台形式(Normal、26Port)
+        public static MachineType machineType;
 
         public static void RunMarco(String marcoName, Dictionary<string, string> args)
         {
@@ -35,7 +50,10 @@ namespace SanwaMarco
         private static void RunMarco(object obj)
         {
             JobUtil util = (JobUtil)obj;
+
+            //改由外部指定
             util.RunMarco();
+
             while (!util.isFinish)
             {
                 SpinWait.SpinUntil(() => false, 1000);
@@ -57,17 +75,6 @@ namespace SanwaMarco
             foreach (DeviceSettingElement foo in config.DeviceSettings)
             {
                 IDevice dvcCtrl;
-                //Console.WriteLine("--------------------------");
-                //Console.WriteLine(foo.Name);
-                //Console.WriteLine(foo.Enable);
-                //Console.WriteLine(foo.Conn_Type);
-                //Console.WriteLine(foo.Conn_Address);
-                //Console.WriteLine(foo.Conn_Port);
-                //Console.WriteLine(foo.Com_Baud_Rate);
-                //Console.WriteLine(foo.Com_Data_Bits);
-                //Console.WriteLine(foo.Com_Parity_Bit);
-                //Console.WriteLine(foo.Com_Stop_Bit);
-                //Console.WriteLine("--------------------------");
 
                 if (!foo.Enable.Equals("1"))
                 {
@@ -83,7 +90,9 @@ namespace SanwaMarco
                     dc.IPAdress = foo.Conn_Address;
                     dc.Port = Int32.Parse(foo.Conn_Port);
                     dvcCtrl = new DeviceController(dc);
+                    dvcCtrl.AssignedRecevicedEvent(ReceivedEventMessage);
                     dvcCtrl.start();
+
                     Marco.deviceMap.Add(foo.Name, dvcCtrl);
                 }
                 else if (foo.Conn_Type.Equals("ComPort"))
@@ -109,6 +118,7 @@ namespace SanwaMarco
                     dc.ParityBit = foo.Com_Parity_Bit;
                     dc.StopBit = foo.Com_Stop_Bit;
                     dvcCtrl = new DeviceController(dc);
+                    dvcCtrl.AssignedRecevicedEvent(ReceivedEventMessage);
                     dvcCtrl.start();
                     Marco.deviceMap.Add(foo.Name, dvcCtrl);
                 }
@@ -130,7 +140,18 @@ namespace SanwaMarco
                     {
                         dc.PortName = foo.Conn_Address;
                     }
-                    dc.File = foo.File;
+
+                    //暫時固定路徑
+                    if (machineType == MachineType.Normal)
+                    {
+                        
+                        dc.File = "mini_18port.xls";
+                    }
+                    else
+                    {
+                        dc.File = "mini.xls";
+                    }
+                    //dc.File = foo.File;
                     dvcCtrl = new I7565DNM(dc);
                     dvcCtrl.start();
                     Marco.deviceMap.Add(foo.Name, dvcCtrl);
@@ -147,29 +168,17 @@ namespace SanwaMarco
         {
             _EventReport.On_Marco_Print(msg);
         }
-        //private static void SendMessage(string device_name, string msg)
-        //{
-        //    if (!deviceMap.ContainsKey(device_name))
-        //    {
-        //        Console.WriteLine("Device: " + device_name  + " 不存在");
-        //    }
-        //    else
-        //    {
-        //        DeviceController device = (DeviceController)deviceMap[device_name];
-        //        util.Send(device, msg);
-        //    }
-        //}
-        //public static void Init(string device_name)
-        //{
-        //    if (!deviceMap.ContainsKey(device_name))
-        //    {
-        //        Console.WriteLine("Device: " + device_name + " 不存在");
-        //    }
-        //    else
-        //    {
-        //        DeviceController device = (DeviceController)deviceMap[device_name];
-        //        device.processState = DeviceController.PROCESS_STATE_IDLE;
-        //    }
-        //}
+
+        public static void Test()
+        {
+            Marco.deviceMap.TryGetValue("N2Purge", out object dvcCtrl);
+
+            if (dvcCtrl != null)
+            {
+                DeviceController Obj = (DeviceController)dvcCtrl;
+                Obj.ReceivedEventMessage?.Invoke(null, "$1EVT:PGSTS:15,0");
+            }
+
+        }
     }
 }

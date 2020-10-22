@@ -387,5 +387,10 @@ namespace SanwaMarco
                 return true;
             }
         }
+        public void AssignedRecevicedEvent(EventHandler<string> ReceivedEventMessage)
+        {
+            return;
+        }
+
     }
 }

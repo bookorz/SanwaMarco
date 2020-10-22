@@ -33,6 +33,12 @@ namespace SanwaMarco
         {
             String result = "";
             switch (method_name){
+                case "N2_PURGE_SET_CMD":
+                    result = N2_PURGE_SET_CMD();
+                    break;
+                case "N2_PURGE_GET_CMD":
+                    result = N2_PURGE_GET_CMD(ref returnValue);
+                    break;
                 case "ATEL_ROBOT_MOTION_CMD":
                     result = ATEL_ROBOT_MOTION_CMD();
                     break;
@@ -121,7 +127,7 @@ namespace SanwaMarco
                 {
                     return result;
                 }
-                SpinWait.SpinUntil(() => deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE, 1000);
+                SpinWait.SpinUntil(() => deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE, 10000);
                 if (deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE)
                 {
                     deviceCtrl.processState = DeviceController.PROCESS_STATE_PROCESS;
@@ -202,22 +208,24 @@ namespace SanwaMarco
             string device = "";
             string cmd = "";
             DeviceController deviceCtrl = null;
-            try
-            {
-                if (!getAtlCmd(ref result, ref device, ref cmd, ref deviceCtrl))
-                {
-                    return result;
-                }
-                deviceCtrl.errorCode = "";
-                deviceCtrl.sendCommand(cmd);
-                result = deviceCtrl.errorCode;
-                return result;
-            }
-            catch (Exception e)
-            {
-                logger.Error(e.StackTrace);
-                return result;
-            }
+
+            return setDeviceCommand(ref result, ref device, ref cmd, ref deviceCtrl);
+            //try
+            //{
+            //    if (!getAtlCmd(ref result, ref device, ref cmd, ref deviceCtrl))
+            //    {
+            //        return result;
+            //    }
+            //    deviceCtrl.errorCode = "";
+            //    deviceCtrl.sendCommand(cmd);
+            //    result = deviceCtrl.errorCode;
+            //    return result;
+            //}
+            //catch (Exception e)
+            //{
+            //    logger.Error(e.StackTrace);
+            //    return result;
+            //}
         }
         #endregion
 
@@ -606,5 +614,95 @@ namespace SanwaMarco
             }
         }
         #endregion
+
+        private string N2_PURGE_SET_CMD()
+        {
+            string result = "N2_PURGE_SET_CMD ERROR";
+            string device = "";
+            string cmd = "";
+            DeviceController deviceCtrl = null;
+
+            return setDeviceCommand(ref result, ref device, ref cmd, ref deviceCtrl);
+        }
+        
+        private string setDeviceCommand(ref string result, ref string device, ref string cmd, ref DeviceController deviceCtrl)
+        {
+            try
+            {
+                if (getAtlCmd(ref result, ref device, ref cmd, ref deviceCtrl))
+                {
+                    DeviceController tempdeviceCtrl = null;
+                    tempdeviceCtrl = deviceCtrl;
+
+                    SpinWait.SpinUntil(() => (tempdeviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE) ||
+                                                (tempdeviceCtrl.processState == DeviceController.PROCESS_STATE_ERROR), 10000);
+
+
+                    deviceCtrl.errorCode = "";
+                    deviceCtrl.processState = DeviceController.PROCESS_STATE_PROCESS;
+                    deviceCtrl.sendCommand(cmd);
+
+                    result = deviceCtrl.errorCode;
+                    //if (deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE)
+                    //{
+                    //    deviceCtrl.errorCode = "";
+                    //    deviceCtrl.processState = DeviceController.PROCESS_STATE_PROCESS;
+                    //    deviceCtrl.sendCommand(cmd);
+
+                    //    ////等待600秒
+                    //    //SpinWait.SpinUntil(() => (tempdeviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE) 
+                    //    //                            || (tempdeviceCtrl.processState == DeviceController.PROCESS_STATE_ERROR), 
+                    //    //                            600000);
+                    //    //result = deviceCtrl.errorCode;
+                    //}
+                    //else
+                    //{
+                    //    result = device + " is " + deviceCtrl.processState + ".";
+                    //}
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.StackTrace);
+                result = e.StackTrace;
+            }
+
+            return result;
+        }
+
+        private string N2_PURGE_GET_CMD(ref string returnValue)
+        {
+            string result = "N2_PURGE_GET_CMD ERROR";
+            string device = "";
+            string cmd = "";
+            DeviceController deviceCtrl = null;
+
+            setDeviceCommand(ref result, ref device, ref cmd, ref deviceCtrl);
+
+            if (result.Equals(""))
+            {
+                DeviceController tempdeviceCtrl = null;
+                tempdeviceCtrl = deviceCtrl;
+
+                SpinWait.SpinUntil(() => (tempdeviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE) 
+                                            || (tempdeviceCtrl.processState == DeviceController.PROCESS_STATE_ERROR), 
+                                            10000);
+
+                if (deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE)
+                {
+                    returnValue = tempdeviceCtrl.FINReturnCode;
+                }
+                else
+                {
+                    result = device + " is " + deviceCtrl.processState + ".";
+                }
+
+            }
+
+            return result;
+
+        }
     }
 }

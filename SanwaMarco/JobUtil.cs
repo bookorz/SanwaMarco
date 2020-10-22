@@ -15,6 +15,7 @@ using SanwaMarco.Comm;
 using System.Xml;
 using SanwaMarco.Controller;
 using log4net;
+using SanwaMarco;
 
 namespace SanwaMarco
 {
@@ -77,10 +78,18 @@ namespace SanwaMarco
         public void RunMarco()
         {
             jobResult = "RunMarco_Error";
-            //localVarMap.Clear();//清除區域變數
             isFinish = false;
-            string filePath = "marco\\" + marcoName + ".vb";
-
+            
+            string filePath;
+            if (Marco.machineType == Marco.MachineType.Normal)
+            {
+                filePath = "marco_18Port\\" + marcoName + ".vb";
+            }
+            else
+            {
+                filePath = "marco_26Port\\" + marcoName + ".vb";
+            }
+            
             //這樣才能讀入中文字元 System.Text.Encoding.GetEncoding(950)
             try
             {

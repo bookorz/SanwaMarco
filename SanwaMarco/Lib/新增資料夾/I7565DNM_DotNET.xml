@@ -1,0 +1,621 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>I7565DNM_DotNET</name>
+    </assembly>
+    <members>
+        <member name="T:I7565DNM_DotNET.I7565DNM">
+            <summary>
+            DLL for I-7565-DNM
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.I7565DNM_PortNotActive">
+            <summary>
+            The USB port doesn't be activated.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.I7565DNM_PortNoResp">
+            <summary>
+            The USB port replied nothing.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.I7565DNM_PortInUse">
+            <summary>
+            The USB port is used by another program.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.I7565DNM_ReStartPort">
+            <summary>
+            The module has been re-plugged. Please restart your application.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_NoError">
+            <summary>
+            No error
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_UnKnowError">
+            <summary>
+            The DeviceNet has some unknown errors.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_BoardNotActive">
+            <summary>
+            The I-7565-DNM has not been activated.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_OnlineError">
+            <summary>
+            The master MAC ID collides with other slave device in the DeviceNet network.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_CANBusError">
+            <summary>
+            The CAN port can't send message. Please check the baud rate or the port of the CAN bus.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_Booting">
+            <summary>
+            The I-7565-DNM is still booting.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_MACIDError">
+            <summary>
+            The MAC ID is exceed the range(0 ~ 63)
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_BaudRateError">
+            <summary>
+            The baud rate is exceed the range(0 ~ 2)
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_ConnectionTypeError">
+            <summary>
+            The connection type is exceed the range (0 ~ 4)
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_DuplicMasterMACID">
+            <summary>
+            The MAC ID is the same with the master's ID.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_EEPROMError">
+            <summary>
+            The EEPROM is out of order.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_NowScanning">
+            <summary>
+            The I-7565-DNM is searching the slave.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_ScanListError">
+            <summary>
+            The Scan List has some errors.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_DeviceExist">
+            <summary>
+            The information of the slave device already exists.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_DeviceNotExist">
+            <summary>
+            The information of the slave device doesn't exist.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_MapTableError">
+            <summary>
+            The MapTable has some errors.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_ExplicitNotAllocate">
+            <summary>
+            The Explicit connection is not established.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_PollNotAllocate">
+            <summary>
+            The Poll connection is not established.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_BitStrobeNotAllocate">
+            <summary>
+            The Strobe connection is not established.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_COSNotAllocate">
+            <summary>
+            The COS connection is not established.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_CyclicNotAllocate">
+            <summary>
+            The Cyclic connection is not established.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_PollAlreadyExist">
+            <summary>
+            The Poll connection has been established.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_BitStrobeAlreadyExist">
+            <summary>
+            The Bit-Strobe connection has been established.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_COSAlreadyExist">
+            <summary>
+            The COS connection has been established.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_CyclicAlreadyExist">
+            <summary>
+            The Cyclic connection has been established.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_CommunicationPause">
+            <summary>
+            The communication between I-7565-DNM and all slave devices has been suspended. 
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_SlaveNoResp">
+            <summary>
+            The slave has no any response.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_WaitForSlaveResp">
+            <summary>
+            The I-7565-DNM is waiting for the response form the slave device.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_SlaveRespError">
+            <summary>
+            The slave replied some errors.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_OutputDataLenError">
+            <summary>
+            The output length of the I/O connection doesn't match the device's output length.
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.DNMXS_InputDataLenError">
+            <summary>
+            The input length of the I/O connection doesn't match the device's input length.
+            </summary>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_TotalI7565DNMModule(System.Byte@,System.Byte[])">
+            <summary>
+            The function can get the count of total I-7565-DNM Modules in the user's PC.
+            </summary>
+            <param name="TotalModules"> [output] The amount of total modules.</param>
+            <param name="PortList"> [output] The list of all USB port in each modules.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_ActiveModule(System.Byte)">
+            <summary>
+            The function is used to activate the I-7565-DNM module. It must be called once before using the other functions of I-7565-DNM APIs.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_CloseModule(System.Byte)">
+            <summary>
+            The function is used to stop and close the USB driver. This method must be called once before exiting the user's application program.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetDLLVersion">
+            <summary>
+            The function can obtain the version information of I7565DNM.DLL.
+            </summary>
+            <returns>The DLL version information. For example: If 100(hex) is return, it means DLL version is 1.00. If 123(hex) is return, it means DLL version is 1.23</returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetFirmwareVersion(System.Byte)">
+            <summary>
+            The function can obtain the version information of the firmware inside the I-7565-DNM module.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <returns>The firmware version information. For example: If 100(hex) is return, it means firmware version is 1.00. If 123(hex) is return, it means firmware version is 1.23.</returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_ResetFirmware(System.Byte)">
+            <summary>
+            The function is used to reset the I-7565-DNM firmware. When the users have changed the baud rate of CAN bus or changed the Master’s MAC ID, the function must be called to make the change enable. After calling this function, the users should wait for 1 or 2 seconds to make the firmware boot up completely.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetMasterMACID(System.Byte)">
+            <summary>
+            The function can get the MAC ID of the DeviceNet master (I-7565-DNM).
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_SetMasterMACID(System.Byte,System.Byte)">
+            <summary>
+            The function can set the MAC ID of the DeviceNet master (I-7565-DNM). After calling this function, the users must call I7565DNM_ResetFirmware to make the change enabled. It will save the information in the EEPROM in the I-7565-DNM.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="MasterMACID"> [input] The new MAC ID of the master. (0 ~ 63)</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetBaudRate(System.Byte)">
+            <summary>
+            This function can help you to get the DeviceNet baud rate information of I-7565-DNM.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <returns>The CAN bus baud rate information in the I-7565-DNM. 0 = 125Kbps , 1 = 250Kbps , 2 = 500Kbps. </returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_SetBaudRate(System.Byte,System.Byte)">
+            <summary>
+            This function can set the DeviceNet baud rate of the I-7565-DNM. After calling this function, you must call I7565DNM_ResetFirmware to reset the firmware to make change enabled.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="BaudRate"> [input] The new baud rate value. 0 = 125K bps , 1 = 250K bps , 2 = 500K bps </param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetMasterStatus(System.Byte)">
+            <summary>
+            The function is used to obtain the firmware status inside the I-7565-DNM. The users can call this function to make sure that the DeviceNet master is online successfully.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetSlaveStatus(System.Byte,System.Byte)">
+            <summary>
+            This function is to get the remote slave device's communication status.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave's MAC ID. (0~63)</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_StartDevice(System.Byte,System.Byte)">
+            <summary>
+            This function is used to start to communicate with the specific device that the users applying to.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave's MAC ID. (0~63)</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_StopDevice(System.Byte,System.Byte)">
+            <summary>
+            This function is used to stop to communicate with the destination device that the users appointed to.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave's MAC ID. (0~63)</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_StartAllDevice(System.Byte)">
+            <summary>
+            This function is used to start to communicate with all slave devices in ScanList.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_StopAllDevice(System.Byte)">
+            <summary>
+            This function is used to stop to communicate with all destination devices in ScanList.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_AddDevice(System.Byte,System.Byte,System.UInt16)">
+            <summary>
+            This function can add the slave devices into the ScanList of the I-7565-DNM and save the information into the EEPROM. Before communicating with any slave devices, the users should call this function to add these devices.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="Explicit_EPR"> [input] The Expected Packet Rate. (Usually is 2500).</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_RemoveDevice(System.Byte,System.Byte)">
+            <summary>
+            This function is used for removing the specified slave device from the ScanList in the I-7565-DNM. And the information of the device in EEPROM is erased at the same time.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_AddIOConnection(System.Byte,System.Byte,System.Byte,System.UInt16,System.UInt16,System.UInt16)">
+            <summary>
+            This method is used to configure the I/O connection of the specific MAC ID device. The I-7565-DNM can get/set the data via the connection, which connects to the specific slave, according to the produced / consumed connection path of this slave device. This configuration data will be saved into EEPROM within the I-7565-DNM.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="ConType"> [input] The remote slave device's I/O connection type. Explicit_Type(0), Poll_Type(1), Bit-Strobe_Type(2), COS_Type(3), Cyclic_Type(4)</param>
+            <param name="DeviceInputLen"> [input] The remote slave device's input length. (Byte) </param>
+            <param name="DeviceOutputLen"> [input] The remote slave device's output length. (Byte)</param>
+            <param name="EPR"> [input] The expected packet rate. (mSec)</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_RemoveIOConnection(System.Byte,System.Byte,System.Byte)">
+            <summary>
+            The function is used to remove the I/O connection configuration.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="ConType"> [input] The remote slave device's I/O connection type. Explicit_Type(0), Poll_Type(1), Bit-Strobe_Type(2), COS_Type(3), Cyclic_Type(4)</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetAttribute(System.Byte,System.Byte,System.Byte,System.Byte,System.Byte)">
+            <summary>
+            This function is used to send the request command to retrieve the attribute value of the specific device's instance. Before calling this function, you must start the device. After calling this function, you should execute the "I7565DNM_GetAttributeValue" to get the response message returned from remote slave device.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="ClassID"> [input] The remote slave device's ClassID</param>
+            <param name="InstanceID"> [input] The remote slave device's InstanceID</param>
+            <param name="AttributeID"> [input] The remote slave device's AttributeID</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetAttributeW(System.Byte,System.Byte,System.UInt16,System.UInt16,System.Byte)">
+            <summary>
+            This function is used to send the request command to retrieve the attribute value of the specific device's instance. Before calling this function, you must start the device. After calling this function, you should execute the "I7565DNM_GetAttributeValue" to get the response message returned from remote slave device.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="ClassID"> [input] The remote slave device's ClassID</param>
+            <param name="InstanceID"> [input] The remote slave device's InstanceID</param>
+            <param name="AttributeID"> [input] The remote slave device's AttributeID</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_IsGetAttributeOK(System.Byte,System.Byte)">
+            <summary>
+            This function is used to check whether the I-7565-DNM has received the response message or not. After checking the response message, you should execute the "I7565DNM_GetAttributeValue" to get the response message returned from remote slave device.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetAttributeValue(System.Byte,System.Byte,System.UInt16@,System.Byte[])">
+            <summary>
+            This function is used to get the attribute value of the specific device's instance from the remote slave device. Before calling this function, the users should call I7565DNM_GetAttribute to send request command first.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="DataLen"> [output] The length of the attribute value (in byte).</param>
+            <param name="DATA"> [output] The attribute value that returned from the slave device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_SetAttribute(System.Byte,System.Byte,System.Byte,System.Byte,System.Byte,System.UInt16,System.Byte[])">
+            <summary>
+            The method is used to set the attribute of the specific device's instance. Before calling this function, you must start the device. After calling this function, you should execute the "I7565DNM_IsSetAttributeOK" to check the response message returned from the remote slave device.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="ClassID"> [input] The remote slave device's ClassID</param>
+            <param name="InstanceID"> [input] The remote slave device's InstanceID</param>
+            <param name="AttributeID"> [input] The remote slave device's AttributeID</param>
+            <param name="DataLen"> [input] The length of the attribute value (in byte).</param>
+            <param name="DATA"> [input] The attribute value that the users want to send.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_SetAttributeW(System.Byte,System.Byte,System.UInt16,System.UInt16,System.Byte,System.UInt16,System.Byte[])">
+            <summary>
+            The method is used to set the attribute of the specific device's instance. Before calling this function, you must start the device. After calling this function, you should execute the "I7565DNM_IsSetAttributeOK" to check the response message returned from the remote slave device.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="ClassID"> [input] The remote slave device's ClassID</param>
+            <param name="InstanceID"> [input] The remote slave device's InstanceID</param>
+            <param name="AttributeID"> [input] The remote slave device's AttributeID</param>
+            <param name="DataLen"> [input] The length of the attribute value (in byte).</param>
+            <param name="DATA"> [input] The attribute value that the users want to send.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_IsSetAttributeOK(System.Byte,System.Byte)">
+            <summary>
+            This function is used to get the response value after executing the "I7565DNM_SetAttribute" function.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_ClearAllConfig(System.Byte)">
+            <summary>
+            This function will clear all configurations in the EEPROM of the I-7565-DNM.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_SearchAllDevices(System.Byte)">
+            <summary>
+            This function is used to retrieve all devices in DeviceNet network. Attention! This function will terminate all communications with remote devices. This function is usually used for developing or debugging applications.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_SearchSpecificDevice(System.Byte,System.UInt16,System.Byte[])">
+            <summary>
+            This function is used to retrieve some devices which specified by the users. Attention! This function will terminate all communications with remote devices. This function is usually used for developing or debugging applications.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="ListCount"> [input] The amount of the slave's ID.</param>
+            <param name="DesMACIDList"> [input] The list of all slave's MAC ID.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_IsSearchOK(System.Byte)">
+            <summary>
+            This function will check whether the searching process has finished or not.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetSearchedDevices(System.Byte,System.UInt16@,System.Byte[],System.Byte[],System.UInt16[],System.UInt16[])">
+            <summary>
+            This function will get the device which have been searched in the network.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="TotalDevices"> [output] The amount of all slave device which are found.</param>
+            <param name="DesMACID"> [output] The list of slave's MAC ID which are found.</param>
+            <param name="Type"> [output] The list of slave's connection type which are found. Explicit_Type(0), Poll_Type(1), Bit-Strobe_Type(2), COS_Type(3), Cyclic_Type(4)</param>
+            <param name="DeviceInputLen"> [output] The list of slave's input length which are found.</param>
+            <param name="DeviceOutputLen"> [output] The list of slave's output length which are found.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetDeviceInfoFromScanList(System.Byte,System.Byte,System.UInt16@,System.Byte[],System.UInt16[],System.UInt16[],System.UInt16[])">
+            <summary>
+            This function will get the ScanList data of certain device in the I-7565-DNM.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The MAC ID number.(0~63)</param>
+            <param name="ListCount"> [output] The amount of all information items.</param>
+            <param name="ConnectionTypeList"> [output] The list of slave's connection type. Explicit_Type(0), Poll_Type(1), Bit-Strobe_Type(2), COS_Type(3), Cyclic_Type(4)</param>
+            <param name="InputDataLenList"> [output] The list of slave's input length.</param>
+            <param name="OutputDataLenList"> [output] The list of slave's output length.</param>
+            <param name="EPRList"> [output] The list of slave's expected packet rate.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetScanList(System.Byte,System.UInt16@,System.Byte[],System.Byte[],System.UInt16[],System.UInt16[],System.UInt16[])">
+            <summary>
+            This function will get all the ScanList data in the I-7565-DNM.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="TotalDevices"> [output] The data count of all the information.</param>
+            <param name="DesMACIDList"> [output] The MAC ID of all the slave devices in the ScanList.</param>
+            <param name="ConnectionTypeList"> [output] The connection type of all the slave devices in the ScanList. Explicit_Type(0), Poll_Type(1), Bit-Strobe_Type(2), COS_Type(3), Cyclic_Type(4)</param>
+            <param name="InputDataLenList"> [output] The input data length of all the slave devices in the ScanList.</param>
+            <param name="OutputDataLenList"> [output] The output data length of all the slave devices in the ScanList.</param>
+            <param name="EPR_List"> [output] The EPR value of all the slave devices in the ScanList.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_ImportEEPROM(System.Byte,System.UInt16,System.Byte[],System.Byte[],System.UInt16[],System.UInt16[],System.UInt16[])">
+            <summary>
+            This function will write all specific devices' information in the ScanList to the EEPROM.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="ListCount"> [input] The data count of all the information.</param>
+            <param name="DesMACIDList"> [input] The MAC ID of all the slave devices.</param>
+            <param name="ConnectionTypeList"> [input] The connection type of all slave devices. Explicit_Type(0), Poll_Type(1), Bit-Strobe_Type(2), COS_Type(3), Cyclic_Type(4)</param>
+            <param name="InputDataLenList"> [input] The input data length of all slave devices.</param>
+            <param name="OutputDataLenList"> [input] The output data length of all slave devices.</param>
+            <param name="EPR_List"> [input] The EPR value of all slave devices.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_SendExplicitMSG(System.Byte,System.Byte,System.Byte,System.Byte,System.Byte,System.UInt16,System.Byte[])">
+            <summary>
+            This function is to get the data according with the produced connection path of the specific MAC ID device via the I/O connection.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="ServiceID"> [input] The remote slave device's ServiceID.</param>
+            <param name="ClassID"> [input] The remote slave device's ClassID.</param>
+            <param name="InstanceID"> [input] The remote slave device's InstanceID.</param>
+            <param name="DataLen"> [input] The length of the attribute value (in byte).</param>
+            <param name="DATA"> [input] The attribute value that the users want to send.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_SendExplicitMSG_W(System.Byte,System.Byte,System.Byte,System.UInt16,System.UInt16,System.UInt16,System.Byte[])">
+            <summary>
+            This function is to get the data according with the produced connection path of the specific MAC ID device via the I/O connection.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="ServiceID"> [input] The remote slave device's ServiceID.</param>
+            <param name="ClassID"> [input] The remote slave device's ClassID.</param>
+            <param name="InstanceID"> [input] The remote slave device's InstanceID.</param>
+            <param name="DataLen"> [input] The length of the attribute value (in byte).</param>
+            <param name="DATA"> [input] The attribute value that the users want to send.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_IsExplicitMSGRespOK(System.Byte,System.Byte)">
+            <summary>
+            This function is used to check whether the I-7565-DNM has received the response message or not. After checking the response message, you should execute the "I7565DNM_GetExplicitMSGRespValue" to get the response message returned from remote slave device.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_GetExplicitMSGRespValue(System.Byte,System.Byte,System.UInt16@,System.Byte[])">
+            <summary>
+            This function is used to get the attribute value of the specific device's instance from the remote slave device. Before calling this function, the users should call I7565DNM_SendExplicitMSG to send request command first.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="DataLen"> [output] The length of the attribute value (in byte).</param>
+            <param name="DATA"> [output] The attribute value that returned from the slave device.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_ReadInputData(System.Byte,System.Byte,System.Byte,System.UInt16@,System.Byte[])">
+            <summary>
+            This function is to get the data according with the produced connection path of the specific MAC ID device via the I/O connection.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="ConType"> [input] The connection type of the remote slave. Explicit_Type(0), Poll_Type(1), Bit-Strobe_Type(2), COS_Type(3), Cyclic_Type(4)</param>
+            <param name="IOLen"> [output] The length of the I/O data (In byte).</param>
+            <param name="IODATA"> [output] The remote I/O data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_WriteOutputData(System.Byte,System.Byte,System.Byte,System.UInt16,System.Byte[])">
+            <summary>
+            The function will set the data according with the consumed connection path of the specific MAC ID device via the I/O connection.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="ConType"> [input] The connection type of the remote slave. Explicit_Type(0), Poll_Type(1), Bit-Strobe_Type(2), COS_Type(3), Cyclic_Type(4)</param>
+            <param name="IOLen"> [Input] The length of the I/O data (In byte).</param>
+            <param name="IODATA"> [Input] The remote I/O data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_ReadbackOutputData(System.Byte,System.Byte,System.Byte,System.UInt16@,System.Byte[])">
+            <summary>
+            The function will read the data according with the consumed connection path of the specific MAC ID device via the I/O connection.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave device's MAC ID (0~63)</param>
+            <param name="ConType"> [input] The connection type of the remote slave. Explicit_Type(0), Poll_Type(1), Bit-Strobe_Type(2), COS_Type(3), Cyclic_Type(4)</param>
+            <param name="IOLen"> [output] The length of the I/O data (In byte).</param>
+            <param name="IODATA"> [output] The remote I/O data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_PauseIOConnection(System.Byte,System.Byte)">
+            <summary>
+            This function will pause in the IO connection with the specific device.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave's MAC ID. (0~63)</param>
+            <returns></returns>
+        </member>
+        <member name="M:I7565DNM_DotNET.I7565DNM.I7565DNM_ResumeIOConnection(System.Byte,System.Byte)">
+            <summary>
+            This function will resume the IO connection with the specific device.
+            </summary>
+            <param name="cPort"> [input] The USB port number.</param>
+            <param name="DesMACID"> [input] The remote slave's MAC ID. (0~63)</param>
+            <returns></returns>
+        </member>
+        <member name="T:I7565DNM_DotNET.I7565DNM.ConType">
+            <summary>
+            Connection Type
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.ConType.ConType_Explicit">
+            <summary>
+            EXPLICIT Message Connection Type
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.ConType.ConType_Poll">
+            <summary>
+            POLL I/O Connection Type
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.ConType.ConType_BitStrobe">
+            <summary>
+            Bit-Strobe I/O Connection Type
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.ConType.ConType_COS">
+            <summary>
+            COS(Change-Of-State) I/O Connection Type
+            </summary>
+        </member>
+        <member name="F:I7565DNM_DotNET.I7565DNM.ConType.ConType_Cyclic">
+            <summary>
+            CYCLIC I/O Connection Type
+            </summary>
+        </member>
+    </members>
+</doc>

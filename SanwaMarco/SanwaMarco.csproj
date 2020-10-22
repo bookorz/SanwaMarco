@@ -107,146 +107,314 @@
     </Content>
     <Content Include="Lib\FTChipIDNet.dll" />
     <Content Include="Lib\FTD2XX_NET.dll" />
-    <Content Include="Lib\I7565DNM_DotNET.dll" />
+    <Content Include="Lib\I7565DNM_DotNET.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Lib\log4net.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
     <Content Include="Lib\NPOI.dll" />
-    <Content Include="marco\CHECK_DNM_SLAVE.vb">
+    <Content Include="marco_18Port\CHECK_DNM_SLAVE.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ELPT_SHUTTER_CLOSE.vb">
+    <Content Include="marco_18Port\ELPT_CLAMP.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ELPT_SHUTTER_OPEN.vb">
+    <Content Include="marco_18Port\ELPT_MOVEIN.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_DOCK.vb">
+    <Content Include="marco_18Port\ELPT_MOVEOUT.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_CLAMP.vb">
+    <Content Include="marco_18Port\ELPT_ORG.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_LATCH_RELEASE.vb">
+    <Content Include="marco_18Port\ELPT_SERVO.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_BACKWARD.vb">
+    <Content Include="marco_18Port\ELPT_SHUTTER_CLOSE.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_LEFT.vb">
+    <Content Include="marco_18Port\ELPT_SHUTTER_OPEN.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_OPEN.vb">
+    <Content Include="marco_18Port\ELPT_UNCLAMP.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_RIGHT.vb">
+    <Content Include="marco_18Port\GET_FOUPS.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_CLOSE.vb">
+    <Content Include="marco_18Port\GET_RELIO.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_FORWARD.vb">
+    <Content Include="marco_18Port\I7565DNM_REFRESH.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_LATCH_FIX.vb">
+    <Content Include="marco_18Port\ILPT_BACKWARD.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_UNCLAMP.vb">
+    <Content Include="marco_18Port\ILPT_CLAMP.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_UNDOCK.vb">
+    <Content Include="marco_18Port\ILPT_CLOSE.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_ORG.vb">
+    <Content Include="marco_18Port\ILPT_DOCK.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_VAC_OFF.vb">
+    <Content Include="marco_18Port\ILPT_FORWARD.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_VAC_ON.vb">
+    <Content Include="marco_18Port\ILPT_LATCH_FIX.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_UNLOAD.vb">
+    <Content Include="marco_18Port\ILPT_LATCH_RELEASE.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ILPT_LOAD.vb">
+    <Content Include="marco_18Port\ILPT_LEFT.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ELPT_ORG.vb">
+    <Content Include="marco_18Port\ILPT_LOAD.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ELPT_SERVO.vb">
+    <Content Include="marco_18Port\ILPT_OPEN.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ELPT_MOVEIN.vb">
+    <Content Include="marco_18Port\ILPT_ORG.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ELPT_MOVEOUT.vb">
+    <Content Include="marco_18Port\ILPT_RIGHT.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ELPT_CLAMP.vb">
+    <Content Include="marco_18Port\ILPT_UNCLAMP.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\GET_FOUPS.vb">
+    <Content Include="marco_18Port\ILPT_UNDOCK.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ELPT_UNCLAMP.vb">
+    <Content Include="marco_18Port\ILPT_UNLOAD.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_RETRACT.vb">
+    <Content Include="marco_18Port\ILPT_VAC_OFF.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_SPEED.vb">
+    <Content Include="marco_18Port\ILPT_VAC_ON.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\SET_RELIOS.vb">
+    <Content Include="marco_18Port\MARCO_GET.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\SET_RELIO.vb">
+    <Content Include="marco_18Port\MARCO_SET.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\I7565DNM_REFRESH.vb">
+    <Content Include="marco_18Port\MARCO_TEST.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\GET_RELIO.vb">
+    <Content Include="marco_18Port\MARCO_TEST2.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\MARCO_SET.vb">
+    <Content Include="marco_18Port\ROBOT_GET.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\MARCO_GET.vb">
+    <Content Include="marco_18Port\ROBOT_GETPUT.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\MARCO_TEST2.vb">
+    <Content Include="marco_18Port\ROBOT_GETW.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\MARCO_TEST.vb">
+    <Content Include="marco_18Port\ROBOT_HOME.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_GET.vb">
+    <Content Include="marco_18Port\ROBOT_INIT.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_GETW.vb">
+    <Content Include="marco_18Port\ROBOT_ORG.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_PUT.vb">
+    <Content Include="marco_18Port\ROBOT_PUT.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_PUTW.vb">
+    <Content Include="marco_18Port\ROBOT_PUTW.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_HOME.vb">
+    <Content Include="marco_18Port\ROBOT_RESET.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_ORG.vb">
+    <Content Include="marco_18Port\ROBOT_RETRACT.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_INIT.vb">
+    <Content Include="marco_18Port\ROBOT_SERVO_ON.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_RESET.vb">
+    <Content Include="marco_18Port\ROBOT_SPEED.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="marco\ROBOT_SERVO_ON.vb">
+    <Content Include="marco_18Port\SET_RELIO.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_18Port\SET_RELIOS.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\CHECK_DNM_SLAVE.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ELPT_CLAMP.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ELPT_MOVEIN.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ELPT_MOVEOUT.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ELPT_ORG.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ELPT_SERVO.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ELPT_SHUTTER_CLOSE.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ELPT_SHUTTER_OPEN.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ELPT_UNCLAMP.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\GET_FOUPS.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\GET_RELIO.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\I7565DNM_REFRESH.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_BACKWARD.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_CLAMP.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_CLOSE.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_DOCK.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_FORWARD.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_LATCH_FIX.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_LATCH_RELEASE.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_LEFT.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_LOAD.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_OPEN.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_ORG.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_RIGHT.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_UNCLAMP.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_UNDOCK.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_UNLOAD.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_VAC_OFF.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ILPT_VAC_ON.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\MARCO_GET.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\MARCO_SET.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\MARCO_TEST.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\MARCO_TEST2.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\N2PURGE_SETMFC.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\N2PURGE_GET_STS.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\N2PURGE_OFF.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\N2PURGE_ON.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\N2PURGE_INIT.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\N2PURGE_RESET.vb" />
+    <Content Include="marco_26Port\O2_GET_STS.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\O2_SET_THRESHOLD.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ROBOT_GET.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ROBOT_GETPUT.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ROBOT_GETW.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ROBOT_HOME.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ROBOT_INIT.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ROBOT_ORG.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ROBOT_PUT.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ROBOT_PUTW.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ROBOT_RESET.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ROBOT_RETRACT.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ROBOT_SERVO_ON.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\ROBOT_SPEED.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\SET_RELIO.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="marco_26Port\SET_RELIOS.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -257,6 +425,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="mini.xls">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="mini_18port.xls">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Properties\Settings.settings">

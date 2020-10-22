@@ -9,5 +9,7 @@ namespace SanwaMarco.Comm
     interface IDevice
     {
         bool start();
+
+        void AssignedRecevicedEvent(EventHandler<string> ReceivedEventMessage);
     }
 }
