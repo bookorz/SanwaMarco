@@ -127,7 +127,7 @@ namespace SanwaMarco
                 {
                     return result;
                 }
-                SpinWait.SpinUntil(() => deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE, 10000);
+                SpinWait.SpinUntil(() => deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE, 1000);
                 if (deviceCtrl.processState == DeviceController.PROCESS_STATE_IDLE)
                 {
                     deviceCtrl.processState = DeviceController.PROCESS_STATE_PROCESS;
@@ -208,24 +208,45 @@ namespace SanwaMarco
             string device = "";
             string cmd = "";
             DeviceController deviceCtrl = null;
+            try
+            {
+                if (!getAtlCmd(ref result, ref device, ref cmd, ref deviceCtrl))
+                {
+                    return result;
+                }
+                deviceCtrl.errorCode = "";
+                deviceCtrl.sendCommand(cmd);
+                result = deviceCtrl.errorCode;
+                return result;
+            }
+            catch (Exception e)
+            {
+                logger.Error(e.StackTrace);
+                return result;
+            }
 
-            return setDeviceCommand(ref result, ref device, ref cmd, ref deviceCtrl);
-            //try
-            //{
-            //    if (!getAtlCmd(ref result, ref device, ref cmd, ref deviceCtrl))
-            //    {
-            //        return result;
-            //    }
-            //    deviceCtrl.errorCode = "";
-            //    deviceCtrl.sendCommand(cmd);
-            //    result = deviceCtrl.errorCode;
-            //    return result;
-            //}
-            //catch (Exception e)
-            //{
-            //    logger.Error(e.StackTrace);
-            //    return result;
-            //}
+            //string result = "ATEL_ROBOT_SET_CMD ERROR";
+            //string device = "";
+            //string cmd = "";
+            //DeviceController deviceCtrl = null;
+
+            //return setDeviceCommand(ref result, ref device, ref cmd, ref deviceCtrl);
+            ////try
+            ////{
+            ////    if (!getAtlCmd(ref result, ref device, ref cmd, ref deviceCtrl))
+            ////    {
+            ////        return result;
+            ////    }
+            ////    deviceCtrl.errorCode = "";
+            ////    deviceCtrl.sendCommand(cmd);
+            ////    result = deviceCtrl.errorCode;
+            ////    return result;
+            ////}
+            ////catch (Exception e)
+            ////{
+            ////    logger.Error(e.StackTrace);
+            ////    return result;
+            ////}
         }
         #endregion
 

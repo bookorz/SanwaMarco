@@ -88,9 +88,9 @@ Function RobotGetPut();
 	'放完後檢查實際IO
 	SETVAR("@interval", "100");
 	SETVAR("@retry_count", "200");
-	IF("'@<arg1>' in ('P1','P2')")
+	IF("'@<arg2>' in ('P1','P2')")
 		SETVAR("@values", "0000010101");
-	ELSEIF("'@<arg1>' in ('P3','P4')") 
+	ELSEIF("'@<arg2>' in ('P3','P4')") 
         SETVAR("@values", "0001");
 	ELSE
 		SETVAR("@values", "00");

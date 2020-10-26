@@ -169,16 +169,16 @@ namespace SanwaMarco
             _EventReport.On_Marco_Print(msg);
         }
 
-        public static void Test()
-        {
-            Marco.deviceMap.TryGetValue("N2Purge", out object dvcCtrl);
+        //public static void Test()
+        //{
+        //    Marco.deviceMap.TryGetValue("N2Purge", out object dvcCtrl);
 
-            if (dvcCtrl != null)
-            {
-                DeviceController Obj = (DeviceController)dvcCtrl;
-                Obj.ReceivedEventMessage?.Invoke(null, "$1EVT:PGSTS:15,0");
-            }
+        //    if (dvcCtrl != null)
+        //    {
+        //        DeviceController Obj = (DeviceController)dvcCtrl;
+        //        Obj.ReceivedEventMessage?.Invoke(null, "$1EVT:PGSTS:15,0");
+        //    }
 
-        }
+        //}
     }
 }
