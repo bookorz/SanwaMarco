@@ -179,13 +179,24 @@ namespace SanwaMarco.Controller
 
                         string checkmessage = msg.Substring(msg.IndexOf("00000000"));
 
-                        if(checkmessage.Contains(","))
+                        ////20201116 Pingchung
+                        ////收到FIN訊號後，回覆ACK
+                        string ACKmsg = returnCode.Replace("FIN", "ACK");
+                        ACKmsg = ACKmsg.Remove(ACKmsg.LastIndexOf(":"), 9);
+                        sendCommand(ACKmsg);
+                        //conn.Send(ACKmsg);
+
+                        if (checkmessage.Contains(","))
                         { 
                             ThreadPool.QueueUserWorkItem(callback =>
                             {
                                 ReceivedEventMessage?.Invoke(null, msg);
                             });
                         }
+
+
+
+
                     }
                     else
                     {

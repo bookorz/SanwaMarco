@@ -161,7 +161,7 @@ namespace SanwaMarco.Comm
 
                         S = S.Substring(S.LastIndexOf(Convert.ToChar(3)) + 1);
                         //logger.Debug("s:" + S);
-                        ThreadPool.QueueUserWorkItem(new WaitCallback(ConnReport.On_Connection_Message), data);
+                        ThreadPool.QueueUserWorkItem(new WaitCallback(ConnReport. On_Connection_Message), data);
                         break;
                     }
 

@@ -153,8 +153,28 @@ namespace SanwaMarco
                     }
                     //dc.File = foo.File;
                     dvcCtrl = new I7565DNM(dc);
-                    dvcCtrl.start();
-                    Marco.deviceMap.Add(foo.Name, dvcCtrl);
+                    if (!dvcCtrl.start() && foo.Conn_Address.Equals(""))
+                    {
+                        string[] ports = SerialPort.GetPortNames();
+
+                        for (int i = 1; i < ports.Count(); i++)
+                        {
+                            dc.PortName = ports[i];
+                            //dvcCtrlarray[].= ports[0];
+                            dvcCtrl = new I7565DNM(dc);
+
+                            if(dvcCtrl.start())
+                            {
+                                Marco.deviceMap.Add(foo.Name, dvcCtrl);
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Marco.deviceMap.Add(foo.Name, dvcCtrl);
+                    }
+
                 }
             }
             ////設定停用

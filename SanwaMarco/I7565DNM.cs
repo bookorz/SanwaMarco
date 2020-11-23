@@ -300,6 +300,7 @@ namespace SanwaMarco
             }
             try
             {
+                logger.Error(portNo);
                 byte ActiveBoardNo = Byte.Parse(portNo);//covert port id to byte
                 ret = I7565DNM_CLOSE();
                 ret = I7565DNM_ACTIVE();
